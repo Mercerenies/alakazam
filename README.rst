@@ -13,7 +13,7 @@ need to use ``sudo``) ::
     pip install alakazam
 
 The Alakazam library does not, as of now, have any additional
-dependencies and is designed for Python 3.
+dependencies and is designed for Python 2 and 3.
 
 Using
 -----

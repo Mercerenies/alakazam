@@ -21,7 +21,10 @@ class Anon:
 
     # Warning: This one will fail if the argument object does not have a __dict__
     def __getattr__(self, prop):
-        return _anon_map(lambda x, p: x.__dict__[p], self, prop)
+        if prop.startswith("__") and prop.endswith("__"):
+            return super.__getattr__(prop)
+        else:
+            return _anon_map(lambda x, p: x.__dict__[p], self, prop)
 
     def __getitem__(self, key):
         return _anon_map(lambda x, k: x[k], self, key)

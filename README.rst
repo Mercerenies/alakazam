@@ -14,7 +14,7 @@ Using
 
 To use the stream functionality of Alakazam, import the ``alakazam``
 package. It is recommended that you alias the package as something
-like `zz` for easier typing.
+like ``zz`` for easier typing.
 
 To use the Alakazam lambda syntax, import the placeholders from
 ``alakazam`` explicitly. ::

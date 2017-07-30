@@ -7,7 +7,12 @@ Functional programming sugar for Python.
 Installing
 ----------
 
-Instructions coming soon.
+A simple ``pip`` command should do the trick. ::
+
+    pip install alakazam
+
+The Alakazam library does not, as of now, have any additional
+dependencies and is compatible with both Python 2 and 3.
 
 Using
 -----
@@ -79,3 +84,13 @@ Reference Material
 The `Alakazam Wiki`_ lists the functions available to user
 
 .. _`Alakazam Wiki`: https://github.com/Mercerenies/alakazam/wiki
+
+License
+-------
+
+Please see ``LICENSE.txt`` for licensing information.
+
+Author
+------
+
+Alakazam was written by Silvio Mayolo.

@@ -1,16 +1,22 @@
 
 from distutils.core import setup
+import os
+
+# https://pythonhosted.org/an_example_pypi_project/setuptools.html
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
     name = 'alakazam',
     packages = ['alakazam'],
     version = '0.1.0',
     description = 'Functional programming sugar for Python',
+    long_description = read("README.rst"),
     author = 'Silvio Mayolo',
     author_email = 'mercerenies@comcast.net',
     license = 'BSD3',
     url = 'https://github.com/Mercerenies/alakazam',
-    download_url = 'https://github.com/Mercerenies/alakazam/archive/0.1.tar.gz',
+    download_url = 'https://github.com/Mercerenies/alakazam/archive/0.1.0.tar.gz',
     keywords = ['functional', 'sugar', 'syntax', 'lambda', 'stream', 'alakazam'],
     classifiers = [
         'Development Status :: 3 - Alpha',

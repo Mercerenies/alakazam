@@ -17,6 +17,12 @@ class Alakazam:
     def __iter__(self):
         return iter(self.value)
 
+    def __reversed__(self):
+        return reversed(self.value)
+
+    def __len__(self):
+        return len(self.value)
+
     def __str__(self):
         return "Alakazam({})".format(str(self.value))
 
@@ -107,7 +113,7 @@ class Alakazam:
         return Alakazam(itertools.takewhile(pred, self))
 
     def enumerate(self, start = 0):
-        """Pairs each element of the enumerable with an index value."""
+        """Pairs each element of the iterable with an index value."""
         return Alakazam(enumerate(self, start))
 
     def group(self, n):
@@ -145,6 +151,10 @@ class Alakazam:
         """Returns all r-combinations of the Alakazam iterable's elements, with replacement."""
         return Alakazam(itertools.combinations_with_replacement(self, r))
 
+    def cycle(self):
+        """Returns an infinite stream of the elements, cyclically."""
+        return Alakazam(itertools.cycle(self))
+
     def reversed(self):
         """Returns a reversed version of the Alakazam iterable. This is only
         meaningful if the underlying iterable can be reversed, so it
@@ -162,11 +172,6 @@ class Alakazam:
 
         """
         return Alakazam(itertools.count(start, step))
-
-    @staticmethod
-    def cycle(p):
-        """Returns an infinite stream of the elements of p, cyclically."""
-        return Alakazam(itertools.cycle(p))
 
     @staticmethod
     def repeat(elem, n = None):
@@ -189,6 +194,11 @@ class Alakazam:
     def range(*args):
         """Returns a range() object through Alakazam."""
         return Alakazam(range(*args))
+
+    @staticmethod
+    def empty():
+        """Returns an empty iterable."""
+        return Alakazam(())
 
     ## Reducers that return a scalar ##
 

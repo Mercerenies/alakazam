@@ -72,3 +72,10 @@ arguments. So ``_1 ** 2`` is a function that squares its first (and
 only) argument, ``_1 + _2`` is a function that adds two arguments
 together, and ``_1.name == "Alakazam"`` is a function which checks
 whether its argument's name attribute is equal to "Alakazam".
+
+Reference Material
+------------------
+
+The `Alakazam Wiki`_ lists the functions available to user
+
+.. _`Alakazam Wiki`: https://github.com/Mercerenies/alakazam/wiki

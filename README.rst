@@ -40,7 +40,7 @@ understand what it's doing. While this backward sequencing of
 operations is fine in a language like Haskell (where pointfree
 notation hides the messy bracketing), in Python it would make much
 more sense if we could read our code in the normal order. This is
-where Alakazam comes in.
+where Alakazam comes in. ::
 
     zz.ZZ.of(arr).map(_1 ** 2).filter(_1 % 2 == 0).list()
 

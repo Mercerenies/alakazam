@@ -1,10 +1,22 @@
 
 class Anon:
+    """Anon is a thin wrapper around a callable object, usually a
+    lambda. What distinguishes Anon from an ordinary callable object
+    is that Anon objects will compose with other Anon objects, while
+    treating ordinary callables as scalar values not meant to be
+    composed with.
+
+    """
 
     def __init__(self, func):
+        """Constructs an Anon. The function argument should be prepared to
+        handle any number of positional and keyword arguments.
+
+        """
         self.__function = func
 
     def __call__(self, *args, **kwargs):
+        """Calls the underlying function, passing all arguments along."""
         return self.__function(*args, **kwargs)
 
     # Warning: This one will fail if the argument object does not have a __dict__
@@ -154,12 +166,29 @@ def _anon_map(f, *anon):
     return Anon(lambda *a, **k: f(*map(lambda x: x(*a, **k), anon1)))
 
 def var(x):
+    """Returns a constant Anon instance which returns the given
+    argument. This is useful in cases where Python cannot figure out
+    that an Anon instance should be created. For instance,
+
+    a = [1, 2, 3]
+    f = a[_1]
+
+    This will fail, since Python calls the __getitem__ method on the
+    list, which expects a slice or integer as an argument. Instead,
+    use this.
+
+    a = [1, 2, 3]
+    f = zz.var(a)[_1]
+
+    """
     return Anon(lambda *args, **kwargs: x)
 
 def arg(n):
+    """Returns an Anon instance which selects its nth positional argument (1-based)."""
     return Anon(lambda *args, **kwargs: args[n - 1])
 
 def kwarg(k):
+    """Returns an Anon instance which selects the given keyword argument."""
     return Anon(lambda *args, **kwargs: kwargs[k])
 
 _1 = arg(1)

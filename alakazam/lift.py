@@ -86,10 +86,10 @@ class Alakazam:
     def zip(self, *args):
         return Alakazam(zip(self, *args))
 
-    def zip_longest(self, *args, fillvalue = None):
+    def zip_longest(self, fillvalue = None, *args):
         return Alakazam(itertools.zip_longest(self, *args, fillvalue = fillvalue))
 
-    def cross_product(self, *args, repeat = 1):
+    def cross_product(self, repeat = 1, *args):
         return Alakazam(itertools.product(self, *args, repeat = repeat))
 
     def permutations(self, r = None):

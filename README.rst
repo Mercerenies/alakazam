@@ -7,7 +7,8 @@ Functional programming sugar for Python.
 Installing
 ----------
 
-A simple ``pip`` command should do the trick. ::
+A simple ``pip`` command should do the trick. (In some cases, you may
+need to use ``sudo``) ::
 
     pip install alakazam
 

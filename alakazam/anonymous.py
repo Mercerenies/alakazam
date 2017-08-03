@@ -32,12 +32,12 @@ class Anon:
         if prop.startswith("__") and prop.endswith("__"):
             return super.__getattr__(prop)
         else:
-            return _anon_map(lambda x, p: x.__dict__[p], self, prop, setter = setter)
+            return _anon_map(lambda x, p: getattr(x, p), self, prop, setter = setter)
 
     def __getitem__(self, key):
         def setter(value):
             return _anon_map(lambda s, p, x: setindex(s, p, x), self, key, value)
-        return _anon_map(lambda x, k: x[k], self, key, setter = setter)
+        return _anon_map(lambda x, k: getindex(x, k), self, key, setter = setter)
 
     def __add__(self, x):
         return _anon_map(lambda s, x: s + x, self, x)

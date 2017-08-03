@@ -255,6 +255,22 @@ def set(k, v):
         raise AlakazamError("Left-hand-side is not assignable")
     return k._Anon__setter(v)
 
+def bind(f): # TODO Document me
+    f = _anon_guard(f)
+    def call(*oargs, **okwargs):
+        def _call(*iargs, **ikwargs):
+            args1 = []
+            for curr in oargs:
+                args1.append(_anon_guard(curr)(*iargs, **ikwargs))
+            kwargs1 = {}
+            for key in okwargs.keys():
+                value = okwargs[key]
+                kwargs1[key] = _anon_guard(value)(*iargs, **ikwargs)
+            f1 = f(*iargs, **ikwargs)
+            return f1(*args1, **kwargs1)
+        return Anon(_call)
+    return call
+
 _1 = arg(1)
 _2 = arg(2)
 _3 = arg(3)

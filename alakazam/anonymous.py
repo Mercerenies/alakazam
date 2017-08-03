@@ -1,6 +1,9 @@
 
 from __future__ import division
 
+from .util import *
+from .error import *
+
 class Anon:
     """Anon is a thin wrapper around a callable object, usually a
     lambda. What distinguishes Anon from an ordinary callable object
@@ -10,12 +13,13 @@ class Anon:
 
     """
 
-    def __init__(self, func):
+    def __init__(self, func, setter = None):
         """Constructs an Anon. The function argument should be prepared to
         handle any number of positional and keyword arguments.
 
         """
         self.__function = func
+        self.__setter = setter
 
     def __call__(self, *args, **kwargs):
         """Calls the underlying function, passing all arguments along."""
@@ -23,13 +27,17 @@ class Anon:
 
     # Warning: This one will fail if the argument object does not have a __dict__
     def __getattr__(self, prop):
+        def setter(value):
+            return _anon_map(lambda s, p, x: setattr(s, p, x), self, prop, value)
         if prop.startswith("__") and prop.endswith("__"):
             return super.__getattr__(prop)
         else:
-            return _anon_map(lambda x, p: x.__dict__[p], self, prop)
+            return _anon_map(lambda x, p: x.__dict__[p], self, prop, setter = setter)
 
     def __getitem__(self, key):
-        return _anon_map(lambda x, k: x[k], self, key)
+        def setter(value):
+            return _anon_map(lambda s, p, x: setindex(s, p, x), self, key, value)
+        return _anon_map(lambda x, k: x[k], self, key, setter = setter)
 
     def __add__(self, x):
         return _anon_map(lambda s, x: s + x, self, x)
@@ -172,9 +180,13 @@ def _anon_guard(anon):
     else:
         return Anon(lambda *args, **kwargs: anon)
 
-def _anon_map(f, *anon):
+def _anon_map(f, *anon, **kwargs):
+    if 'setter' in kwargs:
+        setter = kwargs['setter']
+    else:
+        setter = None
     anon1 = list(map(_anon_guard, anon))
-    return Anon(lambda *a, **k: f(*map(lambda x: x(*a, **k), anon1)))
+    return Anon(lambda *a, **k: f(*map(lambda x: x(*a, **k), anon1)), setter = setter)
 
 def var(x):
     """Returns a constant Anon instance which returns the given
@@ -201,6 +213,32 @@ def arg(n):
 def kwarg(k):
     """Returns an Anon instance which selects the given keyword argument."""
     return Anon(lambda *args, **kwargs: kwargs[k])
+
+def set(k, v):
+    """Returns an Anon instance which makes an assignment, using either
+    __setitem__ or __setattr__ as appropriate. If neither assignment
+    operator makes sense then an exception is raised. Note that the
+    following are the valid ways to call this function.
+
+    set(anon[idx], expr)
+    set(anon.name, expr)
+
+    Where anon must be an Anonymous instance. This means that, if you
+    wish to make an assignment to a constant data structure which does
+    not depend on lambda arguments, you must wrap it in var(), as follows.
+
+    set(zz.var(obj)[0], _1)
+    set(zz.var(obj).name, _1)
+
+    The following use cases do NOT require var().
+
+    set(_1[0], _2)
+    set(_1.name, "John")
+
+    """
+    if k._Anon__setter is None:
+        raise AlakazamError("Left-hand-side is not assignable")
+    return k._Anon__setter(v)
 
 _1 = arg(1)
 _2 = arg(2)

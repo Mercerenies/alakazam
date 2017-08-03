@@ -203,6 +203,21 @@ def var(x):
     a = [1, 2, 3]
     f = zz.var(a)[_1]
 
+    Note that if this function is called on something that is
+    *already* an Anon instance, it will construct another Anon around
+    it. The implication of this is that the original Anon instance
+    should be treated as a constant value in this scope. So, for
+    example, the following defines curried addition.
+
+    f = _1 + zz.var(_1)
+    f(1)(2) # <- Example call
+
+    The first time f is called, it returns an Anon instance which
+    performs addition. Note that this behavior, while well-defined, is
+    often confusing, so please think twice if you're calling zz.var()
+    on Anon instances, and consider whether there is a more readable
+    way to do the same thing.
+
     """
     return Anon(lambda *args, **kwargs: x)
 

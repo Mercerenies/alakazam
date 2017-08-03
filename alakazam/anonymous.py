@@ -30,7 +30,7 @@ class Anon:
         def setter(value):
             return _anon_map(lambda s, p, x: setattr(s, p, x), self, prop, value)
         if prop.startswith("__") and prop.endswith("__"):
-            return super.__getattr__(prop)
+            return super(object, self).__getattr__(prop)
         else:
             return _anon_map(lambda x, p: getattr(x, p), self, prop, setter = setter)
 

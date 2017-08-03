@@ -1,4 +1,6 @@
 
+from __future__ import division
+
 class Anon:
     """Anon is a thin wrapper around a callable object, usually a
     lambda. What distinguishes Anon from an ordinary callable object
@@ -38,6 +40,9 @@ class Anon:
     def __mul__(self, x):
         return _anon_map(lambda s, x: s * x, self, x)
 
+    def __div__(self, x):
+        return _anon_map(lambda s, x: s / x, self, x)
+
     def __truediv__(self, x):
         return _anon_map(lambda s, x: s / x, self, x)
 
@@ -73,6 +78,9 @@ class Anon:
 
     def __rmul__(self, x):
         return _anon_map(lambda x, s: x * s, x, self)
+
+    def __rdiv__(self, x):
+        return _anon_map(lambda x, s: x / s, x, self)
 
     def __rtruediv__(self, x):
         return _anon_map(lambda x, s: x / s, x, self)

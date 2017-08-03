@@ -4,6 +4,9 @@ import functools
 
 from .util import *
 
+# TODO Some positional arguments (like fillvalue) should be changed to keyword arguments
+#      AFTER the rest argument (making sure to retain Python 2 compatibility)
+
 class Alakazam:
 
     ## Initialization ##

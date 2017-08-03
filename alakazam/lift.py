@@ -4,9 +4,6 @@ import functools
 
 from .util import *
 
-# TODO Some positional arguments (like fillvalue) should be changed to keyword arguments
-#      AFTER the rest argument (making sure to retain Python 2 compatibility)
-
 class Alakazam:
 
     ## Initialization ##
@@ -134,12 +131,20 @@ class Alakazam:
         """Zips the Alakazam iterable with the arguments."""
         return Alakazam(zip(self, *args))
 
-    def zip_longest(self, fillvalue = None, *args):
+    def zip_longest(self, *args, **kwargs):
         """Zips the Alakazam iterable with the arguments, padding with fillvalue."""
+        if 'fillvalue' in kwargs:
+            fillvalue = kwargs['fillvalue']
+        else:
+            fillvalue = None
         return Alakazam(itertools.zip_longest(self, *args, fillvalue = fillvalue))
 
-    def cross_product(self, repeat = 1, *args):
+    def cross_product(self, *args, **kwargs):
         """Returns the Cartesian product, as through with itertools.product."""
+        if 'repeat' in kwargs:
+            repeat = kwargs['repeat']
+        else:
+            repeat = 1
         return Alakazam(itertools.product(self, *args, repeat = repeat))
 
     def permutations(self, r = None):

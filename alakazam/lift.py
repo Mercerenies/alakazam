@@ -321,3 +321,30 @@ class Alakazam:
         return tuple(map(Alakazam, itertools.tee(self, n)))
 
 ZZ = Alakazam
+
+def count(start, step = 1):
+    """Returns an infinite stream counting upward or downward, as though
+    with itertools.count.
+
+    """
+    return ZZ.count(start, step = step)
+
+def repeat(elem, n = None):
+    """Repeats the element N times, or forever if N is None."""
+    return ZZ.repeat(elem, n = n)
+
+def of(value):
+    """Constructs an Alakazam value. This method is equivalent to calling
+    the Alakazam constructor directly but sometimes looks neater
+    when chaining method calls together.
+
+    """
+    return ZZ.of(value)
+
+def range(*args):
+    """Returns a range() object through Alakazam."""
+    return ZZ.range(*args)
+
+def empty():
+    """Returns an empty iterable."""
+    return ZZ.empty()

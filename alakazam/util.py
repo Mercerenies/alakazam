@@ -15,3 +15,7 @@ def getindex(object, index):
 
     """
     return object[index]
+
+def delindex(object, index):
+    """Deletes the value at the specified index."""
+    del object[index]

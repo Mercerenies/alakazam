@@ -13,13 +13,14 @@ class Anon:
 
     """
 
-    def __init__(self, func, setter = None):
+    def __init__(self, func, setter = None, deleter = None):
         """Constructs an Anon. The function argument should be prepared to
         handle any number of positional and keyword arguments.
 
         """
         self.__function = func
         self.__setter = setter
+        self.__deleter = deleter
 
     def __call__(self, *args, **kwargs):
         """Calls the underlying function, passing all arguments along."""
@@ -29,15 +30,25 @@ class Anon:
     def __getattr__(self, prop):
         def setter(value):
             return _anon_map(lambda s, p, x: setattr(s, p, x), self, prop, value)
+        def deleter():
+            return _anon_map(lambda s, p: delattr(s, p), self, prop)
         if prop.startswith("__") and prop.endswith("__"):
             return super(object, self).__getattr__(prop)
         else:
-            return _anon_map(lambda x, p: getattr(x, p), self, prop, setter = setter)
+            return _anon_map(
+                lambda x, p: getattr(x, p), self, prop,
+                setter = setter, deleter = deleter
+            )
 
     def __getitem__(self, key):
         def setter(value):
             return _anon_map(lambda s, p, x: setindex(s, p, x), self, key, value)
-        return _anon_map(lambda x, k: getindex(x, k), self, key, setter = setter)
+        def deleter():
+            return _anon_map(lambda s, p: delindex(s, p), self, key)
+        return _anon_map(
+            lambda x, k: getindex(x, k), self, key,
+            setter = setter, deleter = deleter
+        )
 
     def __add__(self, x):
         return _anon_map(lambda s, x: s + x, self, x)
@@ -181,12 +192,8 @@ def _anon_guard(anon):
         return Anon(lambda *args, **kwargs: anon)
 
 def _anon_map(f, *anon, **kwargs):
-    if 'setter' in kwargs:
-        setter = kwargs['setter']
-    else:
-        setter = None
     anon1 = list(map(_anon_guard, anon))
-    return Anon(lambda *a, **k: f(*map(lambda x: x(*a, **k), anon1)), setter = setter)
+    return Anon(lambda *a, **k: f(*map(lambda x: x(*a, **k), anon1)), **kwargs)
 
 def var(x):
     """Returns a constant Anon instance which returns the given
@@ -255,7 +262,34 @@ def set(k, v):
         raise AlakazamError("Left-hand-side is not assignable")
     return k._Anon__setter(v)
 
-def bind(f): # TODO Document me
+def delete(k):
+    """Returns an Anon instance which performs a deletion, using either
+    __delitem__ or __delattr__ as appropriate. If neither deletion
+    operator makes sense then an exception is raised. Note that the
+    following are the valid ways to call this function.
+
+    delete(anon[idx])
+    delete(anon.name)
+
+    Where anon must be an Anonymous instance. This means that, if you
+    wish to make a deletion to a constant data structure which does
+    not depend on lambda arguments, you must wrap it in var(), as
+    follows.
+
+    delete(zz.var(obj)[_1])
+    delete(zz.var(obj).name) # <- This one takes no arguments, but it is still a valid function
+
+    The following use cases do NOT require var().
+
+    delete(_1[0])
+    delete(_1.name)
+
+    """
+    if k._Anon__deleter is None:
+        raise AlakazamError("Left-hand-side is not deletable")
+    return k._Anon__deleter()
+
+def bind(f):
     """Returns a binder object, which can be invoked to produce an Anon
     instance. The function f, as well as any arguments passed to the
     first invocation, can be Anon instances and will be interpolated

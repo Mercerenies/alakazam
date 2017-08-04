@@ -1,6 +1,7 @@
 
 import itertools
 import functools
+import sys
 
 from .util import *
 
@@ -199,6 +200,15 @@ class Alakazam:
         return Alakazam(value)
 
     @staticmethod
+    def of_dict(value):
+        """Constructs an Alakazam value containing key-value 2-tuples."""
+        if sys.version_info >= (3, 0):
+            return Alakazam(value.items())
+        else:
+            return Alakazam(value.iteritems())
+
+
+    @staticmethod
     def range(*args):
         """Returns a range() object through Alakazam."""
         return Alakazam(range(*args))
@@ -340,6 +350,10 @@ def of(value):
 
     """
     return ZZ.of(value)
+
+def of_dict(value):
+    """Constructs an Alakazam value containing key-value 2-tuples."""
+    return ZZ.of_dict(value)
 
 def range(*args):
     """Returns a range() object through Alakazam."""

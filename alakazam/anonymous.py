@@ -256,6 +256,23 @@ def set(k, v):
     return k._Anon__setter(v)
 
 def bind(f): # TODO Document me
+    """Returns a binder object, which can be invoked to produce an Anon
+    instance. The function f, as well as any arguments passed to the
+    first invocation, can be Anon instances and will be interpolated
+    as such.
+
+    bind(foo)(_2, _1)
+
+    This defines a function which calls foo() with its first two
+    arguments, but in reverse order.
+
+    bind(_1)(_2 + 1)
+
+    This defines a function which invokes its first argument, passing
+    the successor of its second argument as a parameter.
+
+    """
+
     f = _anon_guard(f)
     def call(*oargs, **okwargs):
         def _call(*iargs, **ikwargs):

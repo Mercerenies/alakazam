@@ -95,3 +95,27 @@ Author
 ------
 
 Alakazam was written by Silvio Mayolo.
+
+Release Notes (0.2.0)
+---------------------
+
+* Alakazam now uses Python 3 semantics for division (``from __future__
+  import division``) for consistency.
+
+* New functions ``setindex``, ``getindex``, and ``delindex``, for
+  subscripted access and manipulation.
+
+* New utility function ``raise_``.
+
+* Assignment lambdas with ``set``, binder lambdas with ``bind``, and
+  deletion lambdas with ``delete``.
+
+* Errors are reported through ``AlakazamError`` now.
+
+* Changed ``zip_longest`` and ``cross_product`` argument order to
+  better match the ``itertools`` equivalents.
+
+* Static methods on the ``Alakazam`` class can now be called globally.
+
+* Function ``of_dict`` provided to load dictionaries into Alakazam as
+  lists of key-value 2-tuples.

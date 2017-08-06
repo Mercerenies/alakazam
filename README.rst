@@ -48,7 +48,7 @@ notation hides the messy bracketing), in Python it would make much
 more sense if we could read our code in the normal order. This is
 where Alakazam comes in. ::
 
-    zz.ZZ.of(arr).map(_1 ** 2).filter(_1 % 2 == 0).list()
+    zz.of(arr).map(_1 ** 2).filter(_1 % 2 == 0).list()
 
 Now the code reads left-to-right, and the lambdas are not nearly as
 bulky. The ``zz.ZZ`` (which is an alias for the class

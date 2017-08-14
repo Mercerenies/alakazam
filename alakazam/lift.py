@@ -211,7 +211,7 @@ class Alakazam:
     @staticmethod
     def range(*args):
         """Returns a range() object through Alakazam."""
-        return Alakazam(range(*args))
+        return Alakazam(__builtins__.range(*args))
 
     @staticmethod
     def empty():

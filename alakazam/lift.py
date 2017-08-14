@@ -2,6 +2,7 @@
 import itertools
 import functools
 import sys
+import builtins
 
 from .util import *
 
@@ -211,7 +212,7 @@ class Alakazam:
     @staticmethod
     def range(*args):
         """Returns a range() object through Alakazam."""
-        return Alakazam(__builtins__.range(*args))
+        return Alakazam(builtins.range(*args))
 
     @staticmethod
     def empty():

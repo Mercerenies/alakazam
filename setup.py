@@ -9,7 +9,7 @@ def read(fname):
 setup(
     name = 'alakazam',
     packages = ['alakazam'],
-    version = '0.2.1',
+    version = '0.2.2',
     description = 'Functional programming sugar for Python',
     long_description = read("README.rst"),
     author = 'Silvio Mayolo',

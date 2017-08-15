@@ -2,7 +2,11 @@
 import itertools
 import functools
 import sys
-import builtins
+
+if sys.version_info >= (3, 0):
+    import builtins
+else:
+    import __builtin__ as builtins
 
 from .util import *
 

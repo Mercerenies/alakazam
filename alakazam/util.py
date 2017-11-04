@@ -1,6 +1,9 @@
 
 from functools import reduce
 
+def id(x):
+    return x
+
 def compose(*fs):
     """Composes a sequence of functions together."""
     return reduce(lambda g, h: lambda *a, **k: g(h(*a, **k)), fs)

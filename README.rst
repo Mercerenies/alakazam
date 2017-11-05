@@ -96,6 +96,22 @@ Author
 
 Alakazam was written by Silvio Mayolo.
 
+Release Notes (0.3.0)
+---------------------
+
+* New convenience function ``id``.
+
+* Boolean functions ``not``, ``and_``, ``or_``, and ``xor``.
+
+* ``min`` and ``max`` methods on ``Alakazam`` objects.
+
+* New ``flatten`` and ``iterate`` methods.
+
+* ``length`` and ``null`` reduction methods.
+
+* ``None`` is now permitted as an argument to some functions where its
+  behavior would have caused issues before.
+
 Release Notes (0.2.0)
 ---------------------
 

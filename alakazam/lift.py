@@ -10,6 +10,8 @@ else:
 
 from .util import *
 
+_no_value = object()
+
 class Alakazam:
 
     ## Initialization ##
@@ -225,25 +227,25 @@ class Alakazam:
 
     ## Reducers that return a scalar ##
 
-    def reduce(self, func, init = None):
+    def reduce(self, func, init = _no_value):
         """Reduces the Alakazam iterable, as though with the standard
         functools.reduce.
 
         """
-        if init is None:
+        if init is _no_value:
             return functools.reduce(func, self)
         else:
             return functools.reduce(func, self, init)
 
-    def foldl(self, func, init = None):
+    def foldl(self, func, init = _no_value):
         """Reduces the Alakazam iterable from the left."""
         return self.reduce(func, init)
 
-    def foldr(self, func, init = None):
+    def foldr(self, func, init = _no_value):
         """Reduces the Alakazam iterable from the right."""
         return self.foldr_lazy(lambda x, y: func(x, y()), init)
 
-    def foldr_lazy(self, func, init = None):
+    def foldr_lazy(self, func, init = _no_value):
         """Reduces the Alakazam iterable from the right lazily. This method
         comes in handy when dealing with infinite streams. The second
         argument to the folding function is a callable object, not an
@@ -256,7 +258,7 @@ class Alakazam:
             try:
                 arg = next(iterable)
             except StopIteration:
-                if init is None:
+                if init is _no_value:
                     return acc
                 else:
                     return func(acc, lambda: init)
@@ -265,7 +267,7 @@ class Alakazam:
         try:
             arg = next(iterable)
         except StopIteration:
-            if init is None:
+            if init is _no_value:
                 raise TypeError("foldr() of empty sequence with no initial value")
             else:
                 return init

@@ -147,6 +147,17 @@ class Alakazam:
             fillvalue = None
         return Alakazam(itertools.zip_longest(self, *args, fillvalue = fillvalue))
 
+    def flatten(self):
+        """Flattens one layer of the iterable, which should itself contain
+        iterable values.
+
+        """
+        def func():
+            for x in self:
+                for y in x:
+                    yield y
+        return Alakazam(func())
+
     def cross_product(self, *args, **kwargs):
         """Returns the Cartesian product, as through with itertools.product."""
         if 'repeat' in kwargs:

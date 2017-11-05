@@ -281,6 +281,62 @@ class Alakazam:
         """Finds the product of the iterable with __mul__."""
         return functools.reduce(lambda x, y: x * y, self, init)
 
+    def max(self, key = None, default = _no_value):
+        """Returns the largest value in the iterable. If there are multiple
+        values which compare equivalent, the first such value is
+        returned. If the iterable is empty, the default value is
+        returned if one is provided, or an exception is raised if one
+        is not. If a key is provided, it will be applied to the
+        operands of all comparisons. The returned value will be an
+        element of the original iterable, not the output of the key
+        function.
+
+        """
+        if key is None: key = lambda x: x
+        iterable = iter(self)
+        try:
+            value = next(iterable)
+            kvalue = key(value)
+        except StopIteration:
+            if default is _no_value:
+                raise TypeError("max() of empty sequence")
+            else:
+                return default
+        for v in iterable:
+            kv = key(v)
+            if kv > kvalue:
+                value = v
+                kvalue = kv
+        return value
+
+    def min(self, key = None, default = _no_value):
+        """Returns the smallest value in the iterable. If there are multiple
+        values which compare equivalent, the first such value is
+        returned. If the iterable is empty, the default value is
+        returned if one is provided, or an exception is raised if one
+        is not. If a key is provided, it will be applied to the
+        operands of all comparisons. The returned value will be an
+        element of the original iterable, not the output of the key
+        function.
+
+        """
+        if key is None: key = lambda x: x
+        iterable = iter(self)
+        try:
+            value = next(iterable)
+            kvalue = key(value)
+        except StopIteration:
+            if default is _no_value:
+                raise TypeError("min() of empty sequence")
+            else:
+                return default
+        for v in iterable:
+            kv = key(v)
+            if kv < kvalue:
+                value = v
+                kvalue = kv
+        return value
+
     def find(self, func, default = None):
         """Returns the first element of the iterable for which the function
         returns true, or the default value if no such element is found.

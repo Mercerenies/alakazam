@@ -390,6 +390,21 @@ class Alakazam:
         if func is None: func = lambda x: x
         return self.map(func).find(lambda x: x, default = default)
 
+    def null(self):
+        """Returns whether or not the iterable is empty."""
+        try:
+            next(iter(self))
+            return False
+        except StopIteration:
+            return True
+
+    def length(self):
+        """Returns the number of elements in the iterable."""
+        counter = 0
+        for x in self:
+            counter += 1
+        return counter
+
     ## Simplifiers that return another iterable or container type ##
 
     def list(self):

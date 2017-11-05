@@ -2,6 +2,7 @@
 from functools import reduce
 
 def id(x):
+    """Returns the argument without modification."""
     return x
 
 def compose(*fs):
@@ -22,6 +23,49 @@ def getindex(object, index):
 def delindex(object, index):
     """Deletes the value at the specified index."""
     del object[index]
+
+def not_(x):
+    """Returns the Boolean negation of the argument."""
+    return not x
+
+def and_(*xs):
+    """Returns the first falsy value among the arguments, or the final
+    argument if all values are truthy. If no arguments are provided,
+    True is returned.
+
+    """
+    final = True
+    for x in xs:
+        if not x:
+            return x
+        final = x
+    return final
+
+def or_(*xs):
+    """Returns the first truthy value among the arguments, or the final
+    argument if all values are falsy. If no arguments are provided,
+    False is returned.
+
+    """
+    final = False
+    for x in xs:
+        if x:
+            return x
+        final = x
+    return final
+
+def xor(*xs):
+    """Normalizes all of the arguments to Boolean values and then returns
+    the Boolean exclusive-or of all the values. Specifically, this
+    function returns True if and only if an odd number of the
+    arguments are truthy and False otherwise.
+
+    """
+    final = False
+    for x in xs:
+        if x:
+            final = not final
+    return final
 
 def raise_(exception = None):
     """Raises an exception. This works very similarly to the raise

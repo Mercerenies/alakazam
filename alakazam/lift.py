@@ -236,6 +236,19 @@ class Alakazam:
         """Returns an empty iterable."""
         return Alakazam(())
 
+    @staticmethod
+    def iterate(func, value):
+        """Returns an infinite iterable consisting of successive applications
+        of the provided function to the given value.
+
+        """
+        def iterfunc():
+            v = value
+            while True:
+                yield v
+                v = func(v)
+        return Alakazam(iterfunc())
+
     ## Reducers that return a scalar ##
 
     def reduce(self, func, init = _no_value):
@@ -436,3 +449,10 @@ def range(*args):
 def empty():
     """Returns an empty iterable."""
     return ZZ.empty()
+
+def iterate(func, value):
+    """Returns an infinite iterable consisting of successive applications
+    of the provided function to the given value.
+
+    """
+    return ZZ.iterate(func, value)

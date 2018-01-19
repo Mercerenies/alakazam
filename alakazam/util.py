@@ -94,3 +94,11 @@ def do(*xs):
 
     """
     return xs[-1] if xs else None
+
+def tap(obj, func):
+    """Calls the function on the object, then returns the object. Useful
+    for performing initialization routines on temporary objects.
+
+    """
+    func(obj)
+    return obj

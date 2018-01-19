@@ -225,7 +225,6 @@ class Alakazam:
         else:
             return Alakazam(value.iteritems())
 
-
     @staticmethod
     def range(*args):
         """Returns a range() object through Alakazam."""
@@ -248,6 +247,14 @@ class Alakazam:
                 yield v
                 v = func(v)
         return Alakazam(iterfunc())
+
+    @staticmethod
+    def zip(*args):
+        """Zips the arguments together and produces a single Alakazam
+        iterable.
+
+        """
+        return Alakazam(builtins.zip(*args))
 
     ## Reducers that return a scalar ##
 
@@ -471,3 +478,10 @@ def iterate(func, value):
 
     """
     return ZZ.iterate(func, value)
+
+def zip(*args):
+    """Zips the arguments together and produces a single Alakazam
+    iterable.
+
+    """
+    return ZZ.zip(*args)

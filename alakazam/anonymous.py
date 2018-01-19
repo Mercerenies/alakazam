@@ -334,6 +334,20 @@ def bind(f, *args, **kwargs):
         return Anon(_call)
     return call
 
+def do1(*stmts):
+    """Returns an anonymous instance which calls each of the arguments,
+    forwarding its own arguments in the process. The final return
+    value of the anonymous instance is the result of the final
+    argument, or None.
+
+    """
+    def call(*args, **kwargs):
+        value = None
+        for stmt in stmts:
+            value = _anon_guard(stmt)(*args, **kwargs)
+        return value
+    return Anon(call)
+
 _1 = arg(1)
 _2 = arg(2)
 _3 = arg(3)

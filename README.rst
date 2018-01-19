@@ -96,6 +96,25 @@ Author
 
 Alakazam was written by Silvio Mayolo.
 
+Release Notes (0.4.0)
+---------------------
+
+* New convenience syntax for invoking ``bind``.
+
+* ``map`` can take multiple arguments now (Issue #1).
+
+* ``withobject`` transformer method.
+
+* ``zipup`` producer method.
+
+* ``absorb`` and ``consume`` reduction methods.
+
+* Trace functions ``trace``, ``traceid``, and ``tracestack``, for
+  debugging help.
+
+* Terminology change: "Generator" to "Producer" to avoid confusion
+  with the Python "generator" concept.
+
 Release Notes (0.3.0)
 ---------------------
 

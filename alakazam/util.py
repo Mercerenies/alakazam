@@ -87,6 +87,14 @@ def raise_(exception = None):
         raise
     else:
         raise exception
+
+def do(*xs):
+    """Returns the last of the arguments. This is intended to emulate
+    multi-line lambdas, as each argument is a "statement".
+
+    """
+    return xs[-1] if xs else None
+
 def tap(obj, func):
     """Calls the function on the object, then returns the object. Useful
     for performing initialization routines on temporary objects.

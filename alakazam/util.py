@@ -9,6 +9,12 @@ def compose(*fs):
     """Composes a sequence of functions together."""
     return reduce(lambda g, h: lambda *a, **k: g(h(*a, **k)), fs)
 
+def swap(arg):
+    """Swaps the first two elements of the tuple."""
+    def index(x):
+        return 1 - x if x < 2 else x
+    return tuple(arg[index(n)] for n in range(len(arg)))
+
 def setindex(object, index, value):
     """Assigns a value to the specified index, using [] indexing."""
     object[index] = value

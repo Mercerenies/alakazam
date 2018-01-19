@@ -99,6 +99,9 @@ Alakazam was written by Silvio Mayolo.
 Release Notes (0.4.0)
 ---------------------
 
+* Trace functions ``trace``, ``traceid``, and ``tracestack``, for
+  debugging help.
+
 * New convenience syntax for invoking ``bind``.
 
 * ``map`` can take multiple arguments now (Issue #1).
@@ -109,8 +112,7 @@ Release Notes (0.4.0)
 
 * ``absorb`` and ``consume`` reduction methods.
 
-* Trace functions ``trace``, ``traceid``, and ``tracestack``, for
-  debugging help.
+* ``swap`` convenience function for tuples.
 
 * Terminology change: "Generator" to "Producer" to avoid confusion
   with the Python "generator" concept.

@@ -190,7 +190,7 @@ class Alakazam:
         """
         return Alakazam(reversed(self.value))
 
-    ## Generators that construct a Alakazam sequence ##
+    ## Producers that construct a Alakazam sequence ##
 
     @staticmethod
     def count(start, step = 1):

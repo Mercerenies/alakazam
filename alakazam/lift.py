@@ -432,6 +432,12 @@ class Alakazam:
             counter += 1
         return counter
 
+    def consume(self):
+        """Fully consumes the iterator and then returns None."""
+        for x in self:
+            pass
+        return None
+
     ## Simplifiers that return another iterable or container type ##
 
     def list(self):

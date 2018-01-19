@@ -313,6 +313,17 @@ class Alakazam:
                 return init
         return _recurse(arg, iterable)
 
+    def absorb(self, func, init):
+        """Calls the function with init and each element, as though through
+        foldl. The return value of the function is discarded, and init
+        is returned at the end.
+
+        """
+        def operation(acc, x):
+            func(acc, x)
+            return acc
+        return self.foldl(operation, init = init)
+
     def sum(self, init = 0):
         """Sums the iterable with __add__."""
         return sum(self, init)

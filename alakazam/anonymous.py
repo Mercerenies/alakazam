@@ -289,7 +289,7 @@ def delete(k):
         raise AlakazamError("Left-hand-side is not deletable")
     return k._Anon__deleter()
 
-def bind(f):
+def bind(f, *args, **kwargs):
     """Returns a binder object, which can be invoked to produce an Anon
     instance. The function f, as well as any arguments passed to the
     first invocation, can be Anon instances and will be interpolated
@@ -305,7 +305,19 @@ def bind(f):
     This defines a function which invokes its first argument, passing
     the successor of its second argument as a parameter.
 
+    Alternatively, bind can be passed additional arguments, in which
+    case
+
+    bind(foo, *args, **kwargs)
+
+    is equivalent to
+
+    bind(foo)(*args, **kwargs)
+
     """
+
+    if args or kwargs:
+        return bind(f)(*args, **kwargs)
 
     f = _anon_guard(f)
     def call(*oargs, **okwargs):

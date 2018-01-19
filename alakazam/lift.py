@@ -39,9 +39,9 @@ class Alakazam:
 
     ## Transformers that return a new Alakazam ##
 
-    def map(self, func):
+    def map(self, func, *iters):
         """Maps a function over each element."""
-        return Alakazam(map(func, self))
+        return Alakazam(map(func, self, *iters))
 
     def filter(self, func):
         """Retains only elements for which the function returns true."""

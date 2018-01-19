@@ -190,10 +190,19 @@ class Alakazam:
         """
         return Alakazam(reversed(self.value))
 
+    def withobject(self, obj):
+        """Returns an iterator in which every element is paired with the
+        object. So an iterator whose list looks like [1, 2, 3], when
+        paired with 0, will look like [(0, 1), (0, 2), (0, 3)].
+
+        """
+        return ZZ.repeat(obj).zip(self)
+
     ## Producers that construct a Alakazam sequence ##
 
     @staticmethod
     def count(start, step = 1):
+
         """Returns an infinite stream counting upward or downward, as though
         with itertools.count.
 
@@ -249,7 +258,7 @@ class Alakazam:
         return Alakazam(iterfunc())
 
     @staticmethod
-    def zip(*args):
+    def zipup(*args):
         """Zips the arguments together and produces a single Alakazam
         iterable.
 
@@ -479,9 +488,9 @@ def iterate(func, value):
     """
     return ZZ.iterate(func, value)
 
-def zip(*args):
+def zipup(*args):
     """Zips the arguments together and produces a single Alakazam
     iterable.
 
     """
-    return ZZ.zip(*args)
+    return ZZ.zipup(*args)

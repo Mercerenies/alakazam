@@ -1,16 +1,20 @@
 
 import itertools
 import functools
+import operator
 import sys
 from .error import *
 
-_map = map
-
 if sys.version_info >= (3, 0):
     import builtins
+    _map = map
+    _filter = filter
+    _filterfalse = itertools.filterfalse
 else:
     import __builtin__ as builtins
     _map = itertools.imap
+    _filter = itertools.ifilter
+    _filterfalse = itertools.ifilterfalse
 
 from .util import *
 
@@ -49,7 +53,7 @@ class Alakazam:
 
     def filter(self, func):
         """Retains only elements for which the function returns true."""
-        return Alakazam(filter(func, self))
+        return Alakazam(_filter(func, self))
 
     def islice(self, *args):
         """Slices the Alakazam iterable, as if through itertools.islice."""
@@ -63,17 +67,30 @@ class Alakazam:
         """Eliminates the first N elements of the iterable."""
         return self.islice(n, None)
 
-    def accumulate(self, func = None):
+    def accumulate(self, func = None, init = _no_value):
         """Accumulates the elements of the list, using the given function or
         the __add__ operator. This method behaves identically to the
-        itertools.accumulate method.
+        itertools.accumulate method, with the exception that it can
+        take an initial value, which is prepended to the iterable if
+        provided.
 
         """
-
+        def gen():
+            it = iter(self)
+            if init is _no_value:
+                try:
+                    total = next(it)
+                except StopIteration:
+                    return
+            else:
+                total = init
+            yield total
+            for element in it:
+                total = func(total, element)
+                yield total
         if func is None:
-            return Alakazam(itertools.accumulate(self))
-        else:
-            return Alakazam(itertools.accumulate(self, func))
+            func = operator.add
+        return Alakazam(gen())
 
     def chain(self, *args):
         """Chains the iterables together, with the Alakazam iterable at the front."""
@@ -100,7 +117,7 @@ class Alakazam:
 
     def filterfalse(self, pred):
         """Retains only the elements for which the predicate returns false."""
-        return Alakazam(itertools.filterfalse(pred, self))
+        return Alakazam(_filterfalse(pred, self))
 
     def groupby(self, key = None):
         """Groups the elements of the iterable together, as though with

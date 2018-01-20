@@ -4,10 +4,13 @@ import functools
 import sys
 from .error import *
 
+_map = map
+
 if sys.version_info >= (3, 0):
     import builtins
 else:
     import __builtin__ as builtins
+    _map = itertools.imap
 
 from .util import *
 
@@ -42,7 +45,7 @@ class Alakazam:
 
     def map(self, func, *iters):
         """Maps a function over each element."""
-        return Alakazam(map(func, self, *iters))
+        return Alakazam(_map(func, self, *iters))
 
     def filter(self, func):
         """Retains only elements for which the function returns true."""
@@ -468,7 +471,7 @@ class Alakazam:
 
     def tee(self, n = 2):
         """Splits the iterable into multiple iterables, as though through itertools.tee."""
-        return tuple(map(Alakazam, itertools.tee(self, n)))
+        return tuple(_map(Alakazam, itertools.tee(self, n)))
 
 ZZ = Alakazam
 

@@ -24,7 +24,7 @@ from .util import *
 
 _no_value = object()
 
-class Alakazam:
+class Alakazam(object):
 
     ## Initialization ##
 

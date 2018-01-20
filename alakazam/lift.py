@@ -313,7 +313,7 @@ class Alakazam:
             arg = next(iterable)
         except StopIteration:
             if init is _no_value:
-                raise TypeError("foldr() of empty sequence with no initial value")
+                raise AlakazamError("foldr() of empty sequence with no initial value")
             else:
                 return init
         return _recurse(arg, iterable)

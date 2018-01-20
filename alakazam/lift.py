@@ -355,7 +355,7 @@ class Alakazam:
             kvalue = key(value)
         except StopIteration:
             if default is _no_value:
-                raise TypeError("max() of empty sequence")
+                raise AlakazamError("max() of empty sequence")
             else:
                 return default
         for v in iterable:
@@ -383,7 +383,7 @@ class Alakazam:
             kvalue = key(value)
         except StopIteration:
             if default is _no_value:
-                raise TypeError("min() of empty sequence")
+                raise AlakazamError("min() of empty sequence")
             else:
                 return default
         for v in iterable:

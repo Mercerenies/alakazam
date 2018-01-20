@@ -96,6 +96,24 @@ Author
 
 Alakazam was written by Silvio Mayolo.
 
+Release Notes (0.5.0)
+---------------------
+
+* ``accumulate`` can take an initial value now.
+
+* ``accumulate``, ``filterfalse``, and ``zip_longest`` now work
+  correctly on Python 2.
+
+* ``sum`` now works on any type that has ``__add__``, including
+  strings.
+
+* ``compose`` works correctly when the argument list is empty now.
+
+* Several functions that used to raise Python errors now raise
+  ``AlakazamError``.
+
+* Several bugfixes having to do with lazy evaluation in Python 2.
+
 Release Notes (0.4.0)
 ---------------------
 

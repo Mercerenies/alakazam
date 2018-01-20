@@ -331,7 +331,7 @@ class Alakazam:
 
     def sum(self, init = 0):
         """Sums the iterable with __add__."""
-        return sum(self, init)
+        return functools.reduce(lambda x, y: x + y, self, init)
 
     def product(self, init = 1):
         """Finds the product of the iterable with __mul__."""

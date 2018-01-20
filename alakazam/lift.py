@@ -2,6 +2,7 @@
 import itertools
 import functools
 import sys
+from .error import *
 
 if sys.version_info >= (3, 0):
     import builtins
@@ -273,7 +274,11 @@ class Alakazam:
 
         """
         if init is _no_value:
-            return functools.reduce(func, self)
+            iterable = iter(self)
+            try:
+                return functools.reduce(func, iterable, next(iterable))
+            except StopIteration:
+                raise AlakazamError("zz.reduce() of empty iterable with no init")
         else:
             return functools.reduce(func, self, init)
 

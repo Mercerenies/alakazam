@@ -10,11 +10,15 @@ if sys.version_info >= (3, 0):
     _map = map
     _filter = filter
     _filterfalse = itertools.filterfalse
+    _zip = zip
+    _zip_longest = itertools.zip_longest
 else:
     import __builtin__ as builtins
     _map = itertools.imap
     _filter = itertools.ifilter
     _filterfalse = itertools.ifilterfalse
+    _zip = itertools.izip
+    _zip_longest = itertools.izip_longest
 
 from .util import *
 
@@ -158,7 +162,7 @@ class Alakazam:
 
     def zip(self, *args):
         """Zips the Alakazam iterable with the arguments."""
-        return Alakazam(zip(self, *args))
+        return Alakazam(_zip(self, *args))
 
     def zip_longest(self, *args, **kwargs):
         """Zips the Alakazam iterable with the arguments, padding with fillvalue."""
@@ -166,7 +170,7 @@ class Alakazam:
             fillvalue = kwargs['fillvalue']
         else:
             fillvalue = None
-        return Alakazam(itertools.zip_longest(self, *args, fillvalue = fillvalue))
+        return Alakazam(_zip_longest(self, *args, fillvalue = fillvalue))
 
     def flatten(self):
         """Flattens one layer of the iterable, which should itself contain
@@ -284,7 +288,7 @@ class Alakazam:
         iterable.
 
         """
-        return Alakazam(builtins.zip(*args))
+        return Alakazam(_zip(*args))
 
     ## Reducers that return a scalar ##
 

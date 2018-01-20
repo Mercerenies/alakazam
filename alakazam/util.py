@@ -7,7 +7,7 @@ def id(x):
 
 def compose(*fs):
     """Composes a sequence of functions together."""
-    return reduce(lambda g, h: lambda *a, **k: g(h(*a, **k)), fs)
+    return reduce(lambda g, h: lambda *a, **k: g(h(*a, **k)), fs, id)
 
 def swap(arg):
     """Swaps the first two elements of the tuple."""

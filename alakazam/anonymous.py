@@ -13,7 +13,7 @@ class Anon:
 
     """
 
-    def __init__(self, func, setter = None, deleter = None):
+    def __init__(self, func, setter = None, deleter = None, pattern = None):
         """Constructs an Anon. The function argument should be prepared to
         handle any number of positional and keyword arguments.
 
@@ -21,6 +21,7 @@ class Anon:
         self.__function = func
         self.__setter = setter
         self.__deleter = deleter
+        self.__pattern = pattern
 
     def __call__(self, *args, **kwargs):
         """Calls the underlying function, passing all arguments along."""

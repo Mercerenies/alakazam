@@ -231,11 +231,11 @@ def var(x):
 
 def arg(n):
     """Returns an Anon instance which selects its nth positional argument (1-based)."""
-    return Anon(lambda *args, **kwargs: args[n - 1])
+    return Anon(lambda *args, **kwargs: args[n - 1], pattern = n - 1)
 
 def kwarg(k):
     """Returns an Anon instance which selects the given keyword argument."""
-    return Anon(lambda *args, **kwargs: kwargs[k])
+    return Anon(lambda *args, **kwargs: kwargs[k], pattern = k)
 
 def set(k, v):
     """Returns an Anon instance which makes an assignment, using either

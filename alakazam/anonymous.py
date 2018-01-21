@@ -4,7 +4,7 @@ from __future__ import division
 from .util import *
 from .error import *
 
-class Anon:
+class Anon(object):
     """Anon is a thin wrapper around a callable object, usually a
     lambda. What distinguishes Anon from an ordinary callable object
     is that Anon objects will compose with other Anon objects, while

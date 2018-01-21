@@ -1,18 +1,30 @@
 
 import itertools
 import functools
+import operator
 import sys
+from .error import *
 
 if sys.version_info >= (3, 0):
     import builtins
+    _map = map
+    _filter = filter
+    _filterfalse = itertools.filterfalse
+    _zip = zip
+    _zip_longest = itertools.zip_longest
 else:
     import __builtin__ as builtins
+    _map = itertools.imap
+    _filter = itertools.ifilter
+    _filterfalse = itertools.ifilterfalse
+    _zip = itertools.izip
+    _zip_longest = itertools.izip_longest
 
 from .util import *
 
 _no_value = object()
 
-class Alakazam:
+class Alakazam(object):
 
     ## Initialization ##
 
@@ -41,11 +53,11 @@ class Alakazam:
 
     def map(self, func, *iters):
         """Maps a function over each element."""
-        return Alakazam(map(func, self, *iters))
+        return Alakazam(_map(func, self, *iters))
 
     def filter(self, func):
         """Retains only elements for which the function returns true."""
-        return Alakazam(filter(func, self))
+        return Alakazam(_filter(func, self))
 
     def islice(self, *args):
         """Slices the Alakazam iterable, as if through itertools.islice."""
@@ -59,17 +71,30 @@ class Alakazam:
         """Eliminates the first N elements of the iterable."""
         return self.islice(n, None)
 
-    def accumulate(self, func = None):
+    def accumulate(self, func = None, init = _no_value):
         """Accumulates the elements of the list, using the given function or
         the __add__ operator. This method behaves identically to the
-        itertools.accumulate method.
+        itertools.accumulate method, with the exception that it can
+        take an initial value, which is prepended to the iterable if
+        provided.
 
         """
-
+        def gen():
+            it = iter(self)
+            if init is _no_value:
+                try:
+                    total = next(it)
+                except StopIteration:
+                    return
+            else:
+                total = init
+            yield total
+            for element in it:
+                total = func(total, element)
+                yield total
         if func is None:
-            return Alakazam(itertools.accumulate(self))
-        else:
-            return Alakazam(itertools.accumulate(self, func))
+            func = operator.add
+        return Alakazam(gen())
 
     def chain(self, *args):
         """Chains the iterables together, with the Alakazam iterable at the front."""
@@ -96,7 +121,7 @@ class Alakazam:
 
     def filterfalse(self, pred):
         """Retains only the elements for which the predicate returns false."""
-        return Alakazam(itertools.filterfalse(pred, self))
+        return Alakazam(_filterfalse(pred, self))
 
     def groupby(self, key = None):
         """Groups the elements of the iterable together, as though with
@@ -137,7 +162,7 @@ class Alakazam:
 
     def zip(self, *args):
         """Zips the Alakazam iterable with the arguments."""
-        return Alakazam(zip(self, *args))
+        return Alakazam(_zip(self, *args))
 
     def zip_longest(self, *args, **kwargs):
         """Zips the Alakazam iterable with the arguments, padding with fillvalue."""
@@ -145,7 +170,7 @@ class Alakazam:
             fillvalue = kwargs['fillvalue']
         else:
             fillvalue = None
-        return Alakazam(itertools.zip_longest(self, *args, fillvalue = fillvalue))
+        return Alakazam(_zip_longest(self, *args, fillvalue = fillvalue))
 
     def flatten(self):
         """Flattens one layer of the iterable, which should itself contain
@@ -263,7 +288,7 @@ class Alakazam:
         iterable.
 
         """
-        return Alakazam(builtins.zip(*args))
+        return Alakazam(_zip(*args))
 
     ## Reducers that return a scalar ##
 
@@ -273,7 +298,11 @@ class Alakazam:
 
         """
         if init is _no_value:
-            return functools.reduce(func, self)
+            iterable = iter(self)
+            try:
+                return functools.reduce(func, iterable, next(iterable))
+            except StopIteration:
+                raise AlakazamError("zz.reduce() of empty iterable with no init")
         else:
             return functools.reduce(func, self, init)
 
@@ -308,7 +337,7 @@ class Alakazam:
             arg = next(iterable)
         except StopIteration:
             if init is _no_value:
-                raise TypeError("foldr() of empty sequence with no initial value")
+                raise AlakazamError("foldr() of empty sequence with no initial value")
             else:
                 return init
         return _recurse(arg, iterable)
@@ -326,7 +355,7 @@ class Alakazam:
 
     def sum(self, init = 0):
         """Sums the iterable with __add__."""
-        return sum(self, init)
+        return functools.reduce(lambda x, y: x + y, self, init)
 
     def product(self, init = 1):
         """Finds the product of the iterable with __mul__."""
@@ -350,7 +379,7 @@ class Alakazam:
             kvalue = key(value)
         except StopIteration:
             if default is _no_value:
-                raise TypeError("max() of empty sequence")
+                raise AlakazamError("max() of empty sequence")
             else:
                 return default
         for v in iterable:
@@ -378,7 +407,7 @@ class Alakazam:
             kvalue = key(value)
         except StopIteration:
             if default is _no_value:
-                raise TypeError("min() of empty sequence")
+                raise AlakazamError("min() of empty sequence")
             else:
                 return default
         for v in iterable:
@@ -463,7 +492,7 @@ class Alakazam:
 
     def tee(self, n = 2):
         """Splits the iterable into multiple iterables, as though through itertools.tee."""
-        return tuple(map(Alakazam, itertools.tee(self, n)))
+        return tuple(_map(Alakazam, itertools.tee(self, n)))
 
 ZZ = Alakazam
 

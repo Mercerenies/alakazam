@@ -96,6 +96,45 @@ Author
 
 Alakazam was written by Silvio Mayolo.
 
+Release Notes (0.5.0)
+---------------------
+
+* ``accumulate`` can take an initial value now.
+
+* ``accumulate``, ``filterfalse``, and ``zip_longest`` now work
+  correctly on Python 2.
+
+* ``sum`` now works on any type that has ``__add__``, including
+  strings.
+
+* ``compose`` works correctly when the argument list is empty now.
+
+* Several functions that used to raise Python errors now raise
+  ``AlakazamError``.
+
+* Several bugfixes having to do with lazy evaluation in Python 2.
+
+Release Notes (0.4.0)
+---------------------
+
+* Trace functions ``trace``, ``traceid``, and ``tracestack``, for
+  debugging help.
+
+* New convenience syntax for invoking ``bind``.
+
+* ``map`` can take multiple arguments now (Issue #1).
+
+* ``withobject`` transformer method.
+
+* ``zipup`` producer method.
+
+* ``absorb`` and ``consume`` reduction methods.
+
+* ``swap`` convenience function for tuples.
+
+* Terminology change: "Generator" to "Producer" to avoid confusion
+  with the Python "generator" concept.
+
 Release Notes (0.3.0)
 ---------------------
 

@@ -26,13 +26,18 @@ class PatternMatch(object):
         if index in self.vars:
             raise AlakazamError("Repeated binding in pattern")
         if isinstance(index, int):
+            index -= 1
             self.max = max(self.max, index + 1)
         self.vars[index] = value
 
     def __getitem__(self, index):
+        if isinstance(index, int):
+            index -= 1
         return self.vars.get(index, None)
 
     def __delitem__(self, index):
+        if isinstance(index, int):
+            index -= 1
         if index in self.vars:
             del self.vars[index]
 
@@ -42,7 +47,7 @@ class PatternMatch(object):
     def build_args(self):
         if not self:
             return None
-        tup = tuple(self[i] for i in range(self.max))
+        tup = tuple(self.vars[i] for i in range(self.max))
         kw = dict((key, self.vars[key]) for key in self.vars if isinstance(key, str))
         return (tup, kw)
 
@@ -125,6 +130,41 @@ def let(*args):
         else:
             raise AlakazamError("let-expression on failed pattern match")
 
+class switch(object):
+
+    def __init__(self, obj):
+        self.field = obj
+        self.matched = False
+        self.match = None
+        self.result = None
+
+    def case(self, ptn, func = None):
+        # m.case(ptn)
+        # m.case(ptn, func)
+        if self.matched:
+            return None if func else False
+        match_expr = match(ptn, self.field)
+        if match_expr:
+            self.match = match_expr
+            self.matched = True
+            if func:
+                if not callable(func):
+                    func0 = func
+                    func = lambda: func0
+                self.result = match_expr.call(func)
+                return self.result
+            else:
+                return True
+
+    def __getitem__(self, value):
+        return self.match[value]
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass
+
 class PatternClass(type):
 
     def __new__(cls, name, parents, dct):
@@ -154,5 +194,14 @@ class Tup(object):
         return tuple(args)
     def zz_unapply(arg):
         if not isinstance(arg, tuple):
+            return None
+        return arg
+
+@pattern_class
+class List(object):
+    def zz_apply(*args):
+        return list(args)
+    def zz_unapply(arg):
+        if not isinstance(arg, list):
             return None
         return arg

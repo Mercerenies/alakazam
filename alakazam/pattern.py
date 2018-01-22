@@ -23,6 +23,8 @@ class PatternMatch(object):
         return self.__bool__()
 
     def __setitem__(self, index, value):
+        if index in self.vars:
+            raise AlakazamError("Repeated binding in pattern")
         if isinstance(index, int):
             self.max = max(self.max, index + 1)
         self.vars[index] = value
@@ -36,6 +38,20 @@ class PatternMatch(object):
 
     def fail(self):
         self.okay = False
+
+    def build_args(self):
+        if not self:
+            return None
+        tup = tuple(self[i] for i in range(self.max))
+        kw = dict((key, self.vars[key]) for key in self.vars if isinstance(key, str))
+        return (tup, kw)
+
+    def call(self, func):
+        if self:
+            args, kwargs = self.build_args()
+            return func(*args, **kwargs)
+        else:
+            raise AlakazamError("Cannot call on failed pattern match")
 
 def _is_etc(obj):
     return obj is Ellipsis or isinstance(obj, etc)
@@ -95,6 +111,19 @@ def match(ptn, obj):
     res = PatternMatch()
     _match_impl(res, ptn, obj)
     return res
+
+def let(*args):
+    # let(ptn, obj, func)
+    # let(match_obj, func)
+    if len(args) == 3:
+        ptn, obj, func = args
+        return let(match(ptn, obj), func)
+    else:
+        match_expr, func = args
+        if match_expr:
+            return match_expr.call(func)
+        else:
+            raise AlakazamError("let-expression on failed pattern match")
 
 class PatternClass(type):
 

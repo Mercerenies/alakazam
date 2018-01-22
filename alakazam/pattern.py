@@ -156,6 +156,9 @@ class switch(object):
             else:
                 return True
 
+    def default(self, func = None):
+        return self.case(arg(1), func)
+
     def __getitem__(self, value):
         return self.match[value]
 

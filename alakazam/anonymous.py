@@ -262,6 +262,13 @@ def set(k, v):
         raise AlakazamError("Left-hand-side is not assignable")
     return k._Anon__setter(v)
 
+def assign(k, v):
+    """This is equivalent to set(k, v). Use this function if importing
+    unqualified, since set() is a built-in Python function.
+
+    """
+    return set(k, v)
+
 def delete(k):
     """Returns an Anon instance which performs a deletion, using either
     __delitem__ or __delattr__ as appropriate. If neither deletion

@@ -6,7 +6,7 @@ zero = object()
 
 class etc(object):
 
-    def __init__(self, name):
+    def __init__(self, name = None):
         self.name = name
 
 class PatternMatch(object):
@@ -208,3 +208,10 @@ class List(object):
         if not isinstance(arg, list):
             return None
         return arg
+
+@pattern_class
+class Iter(object):
+    def zz_apply(*args):
+        return args
+    def zz_unapply(arg):
+        return iter(arg)

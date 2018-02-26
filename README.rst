@@ -101,6 +101,8 @@ Release Notes (0.6.0)
 
 * ``intersperse`` and ``intertwine`` transformers added.
 
+* ``string`` reducer added.
+
 * ``assign`` as a synonym for ``set``.
 
 * All classes are now new-style in Python 2 as well as Python 3.

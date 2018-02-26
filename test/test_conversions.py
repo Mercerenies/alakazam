@@ -19,3 +19,4 @@ class ConversionTest(unittest.TestCase):
     def test_dict(self):
         data = {1: 'foo', 2: 'bar', 10: 10, "Alpha": 20, None: None}
         self.assertEqual(zz.of_dict(data).dict(), data)
+

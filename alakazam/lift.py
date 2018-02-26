@@ -501,6 +501,16 @@ class Alakazam(object):
             pass
         return None
 
+    def string(self):
+        """Converts the iterable, which must be finite and consist only of
+        strings, to a string.
+
+        """
+        try:
+            return ''.join(self)
+        except TypeError:
+            raise AlakazamError("zz.string() on non-string element")
+
     ## Simplifiers that return another iterable or container type ##
 
     def list(self):
@@ -525,6 +535,7 @@ class Alakazam(object):
     ## Miscellaneous ##
 
     def tee(self, n = 2):
+
         """Splits the iterable into multiple iterables, as though through itertools.tee."""
         return tuple(_map(Alakazam, itertools.tee(self, n)))
 

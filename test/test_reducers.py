@@ -294,3 +294,10 @@ class ReducerTest(unittest.TestCase):
             return True
         zz.of([1, 2, 3]).filterfalse(foo) # Don't consume
         self.assertEqual(x[1], -10)
+
+    def test_string_1(self):
+        self.assertEqual(zz.of(['abc', 'def', 'ghi']).string(), 'abcdefghi')
+
+    def test_string_2(self):
+        with self.assertRaises(zz.AlakazamError):
+            zz.of(['abc', 3, 'ghi']).string()

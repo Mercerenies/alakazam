@@ -275,3 +275,13 @@ class TransformerTest(unittest.TestCase):
 
     def test_withobject_2(self):
         self.assertEqual(zz.count(1).withobject(-1).take(3).list(), [(-1, 1), (-1, 2), (-1, 3)])
+
+    def test_interlace_1(self):
+        self.assertEqual(zz.of([1, 2, 3]).interlace([4, 5, 6]).list(), [1, 4, 2, 5, 3, 6])
+
+    def test_interlace_2(self):
+        self.assertEqual(zz.of([1, 2]).interlace([3, 4], [5, 6]).list(), [1, 3, 5, 2, 4, 6])
+
+    def test_interlace_3(self):
+        iterable = zz.count(1, step=1).interlace(zz.count(-1, step=-1))
+        self.assertEqual(iterable.take(10).list(), [1, -1, 2, -2, 3, -3, 4, -4, 5, -5])

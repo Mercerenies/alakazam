@@ -285,3 +285,13 @@ class TransformerTest(unittest.TestCase):
     def test_interlace_3(self):
         iterable = zz.count(1, step=1).interlace(zz.count(-1, step=-1))
         self.assertEqual(iterable.take(10).list(), [1, -1, 2, -2, 3, -3, 4, -4, 5, -5])
+
+    def test_intersperse_1(self):
+        self.assertEqual(zz.of([1, 2, 3]).intersperse(999).list(), [1, 999, 2, 999, 3])
+
+    def test_intersperse_2(self):
+        self.assertEqual(zz.empty().intersperse(0).list(), [])
+
+    def test_intersperse_3(self):
+        iterable = zz.count(1, step=1).intersperse(0)
+        self.assertEqual(iterable.take(10).list(), [1, 0, 2, 0, 3, 0, 4, 0, 5, 0])

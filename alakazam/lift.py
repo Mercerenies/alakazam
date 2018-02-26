@@ -240,6 +240,23 @@ class Alakazam(object):
                 pass
         return Alakazam(iterfunc())
 
+    def intersperse(self, obj):
+        """A special case of interlace() which places the same object between
+        every pair of sequence elements.
+
+        """
+        def iterfunc():
+            c = iter(self)
+            try:
+                yield next(c)
+                while True:
+                    curr = next(c)
+                    yield obj
+                    yield curr
+            except StopIteration:
+                pass
+        return Alakazam(iterfunc())
+
     ## Producers that construct a Alakazam sequence ##
 
     @staticmethod

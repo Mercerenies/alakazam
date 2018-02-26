@@ -96,6 +96,15 @@ Author
 
 Alakazam was written by Silvio Mayolo.
 
+Release Notes (0.6.0)
+---------------------
+
+* ``intersperse`` and ``intertwine`` transformers added.
+
+* ``assign`` as a synonym for ``set``.
+
+* All classes are now new-style in Python 2 as well as Python 3.
+
 Release Notes (0.5.0)
 ---------------------
 

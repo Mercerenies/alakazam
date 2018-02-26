@@ -9,14 +9,14 @@ def read(fname):
 setup(
     name = 'alakazam',
     packages = ['alakazam'],
-    version = '0.5.0',
+    version = '0.6.0',
     description = 'Functional programming sugar for Python',
     long_description = read("README.rst"),
     author = 'Silvio Mayolo',
     author_email = 'mercerenies@comcast.net',
     license = 'BSD3',
     url = 'https://github.com/Mercerenies/alakazam',
-    download_url = 'https://github.com/Mercerenies/alakazam/archive/0.5.0.tar.gz',
+    download_url = 'https://github.com/Mercerenies/alakazam/archive/0.6.0.tar.gz',
     keywords = ['functional', 'sugar', 'syntax', 'lambda', 'stream', 'alakazam'],
     classifiers = [
         'Development Status :: 3 - Alpha',

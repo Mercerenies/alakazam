@@ -223,6 +223,23 @@ class Alakazam(object):
         """
         return ZZ.repeat(obj).zip(self)
 
+    def interlace(self, *args):
+        """Returns an iterator which contains the first element of each
+        iterator, followed by the second, then the third, and so
+        on. The resulting sequence terminates when the first iterator
+        reaches its end.
+
+        """
+        def iterfunc():
+            chain = list(map(iter, (self,) + args))
+            try:
+                while True:
+                    for c in chain:
+                        yield next(c)
+            except StopIteration:
+                pass
+        return Alakazam(iterfunc())
+
     ## Producers that construct a Alakazam sequence ##
 
     @staticmethod

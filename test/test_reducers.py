@@ -301,3 +301,23 @@ class ReducerTest(unittest.TestCase):
     def test_string_2(self):
         with self.assertRaises(zz.AlakazamError):
             zz.of(['abc', 3, 'ghi']).string()
+
+    def test_string_3(self):
+        self.assertEqual(zz.empty().string(), '')
+
+    def test_join_1(self):
+        self.assertEqual(zz.of(['abc', 'def', 'ghi']).join(), 'abc,def,ghi')
+
+    def test_join_2(self):
+        with self.assertRaises(zz.AlakazamError):
+            zz.of(['abc', 3, 'ghi']).join()
+
+    def test_join_3(self):
+        with self.assertRaises(zz.AlakazamError):
+            zz.of(['abc', 3, 'ghi']).join('**')
+
+    def test_join_4(self):
+        self.assertEqual(zz.of(['abc', 'def', 'ghi']).join('**'), 'abc**def**ghi')
+
+    def test_join_5(self):
+        self.assertEqual(zz.of(['abc', 'def', 'ghi']).join(''), 'abcdefghi')

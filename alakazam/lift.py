@@ -511,6 +511,18 @@ class Alakazam(object):
         except TypeError:
             raise AlakazamError("zz.string() on non-string element")
 
+    def join(self, delim=','):
+        """Converts the iterable, which must be finite and consist only of
+        strings, to a string with the given delimiter between
+        elements. If the delimiter is not provided, it defaults to a
+        comma.
+
+        """
+        try:
+            return delim.join(self)
+        except TypeError:
+            raise AlakazamError("zz.string() on non-string element")
+
     ## Simplifiers that return another iterable or container type ##
 
     def list(self):

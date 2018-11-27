@@ -127,6 +127,44 @@ class ReducerTest(unittest.TestCase):
         func = lambda x, y: x
         self.assertEqual(zz.count(999).foldr_lazy(func, init = 10), 999)
 
+    def test_absorb_1(self):
+        res = zz.range(5).absorb(lambda x, y: x.append(y), [])
+        self.assertEqual(res, list(range(5)))
+
+    def test_absorb_2(self):
+        def f(x, y):
+            x[y] = 2
+        res = zz.of(["a", "b", "c"]).absorb(f, {})
+        self.assertEqual(res, {"a": 2, "b": 2, "c": 2})
+
+    def test_absorb_3(self):
+        obj = object()
+        res = zz.range(10).absorb(lambda x, y: 0, obj)
+        self.assertEqual(obj, res)
+
+    def test_absorb_4(self):
+        test = [0]
+        def f(x, y):
+            test[0] += 1
+        zz.range(10).absorb(f, None)
+        self.assertEqual(test, [10])
+
+    def test_absorb_5(self):
+        def f(x, y):
+            return 99
+        self.assertEqual(zz.of([1, 2, 3]).absorb(f, "foobar"), "foobar")
+
+    def test_absorb_6(self):
+        def f(x, y):
+            raise SampleError("Error function")
+        with self.assertRaises(SampleError):
+            zz.of([None]).absorb(f, {})
+
+    def test_absorb_7(self):
+        def f(x, y):
+            raise Exception("This exception should never be raised")
+        self.assertEqual(zz.empty().absorb(f, "lorem ipsum"), "lorem ipsum")
+
     def test_sum_1(self):
         self.assertEqual(zz.of([1, 2, 3, 4]).sum(), 10)
 

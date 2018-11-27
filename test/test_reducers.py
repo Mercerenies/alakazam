@@ -3,6 +3,8 @@ import unittest
 import functools
 import alakazam as zz
 
+from test_util import SampleError
+
 @functools.total_ordering
 class Contrived:
     def __init__(self, n):
@@ -321,3 +323,37 @@ class ReducerTest(unittest.TestCase):
 
     def test_join_5(self):
         self.assertEqual(zz.of(['abc', 'def', 'ghi']).join(''), 'abcdefghi')
+
+    def test_apply_1(self):
+        self.assertEqual(zz.range(5).apply(list), list(range(5)))
+
+    def test_apply_2(self):
+        gen = zz.count(0) # Infinite sequence
+        self.assertEqual(gen.apply(lambda _: "example text"), "example text")
+
+    def test_apply_3(self):
+        gen = zz.range(5)
+        self.assertEqual(zz.range(5).apply(sum), 10)
+
+    def test_apply_4(self):
+        def f(x):
+            x = list(x)
+            return x[0] + x[2]
+        self.assertEqual(zz.of([10, -20, 30]).apply(f), 40)
+
+    def test_apply_5(self):
+        ex = { 'foo': 0 }
+        def f(x):
+            # nonlocal ex (can't do this, for Python 2 compatibility)
+            ex['foo'] += 1
+        # Any call to apply calls the function exactly once
+        zz.range(10).apply(f)
+        zz.of([1, 2, 3]).apply(f)
+        zz.empty().apply(f)
+        self.assertEqual(ex['foo'], 3)
+
+    def test_apply_6(self):
+        def f(x):
+            raise SampleError("This function raises an error")
+        with self.assertRaises(SampleError):
+            zz.empty().apply(f)

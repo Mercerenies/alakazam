@@ -523,6 +523,15 @@ class Alakazam(object):
         except TypeError:
             raise AlakazamError("zz.string() on non-string element")
 
+    def apply(self, f):
+        """Applies an arbitrary function to the iterable itself. This is
+        equivalent to simply calling the function on the iterable
+        Alakazam object directly but tends to fit better into a stream
+        of calls.
+
+        """
+        return f(self)
+
     ## Simplifiers that return another iterable or container type ##
 
     def list(self):

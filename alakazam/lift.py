@@ -560,6 +560,17 @@ class Alakazam(object):
         """Splits the iterable into multiple iterables, as though through itertools.tee."""
         return tuple(_map(Alakazam, itertools.tee(self, n)))
 
+    def split(self, n):
+        """Splits the iterable at the given position, returning a 2-tuple
+        consisting of the first N elements and then an Alakazam
+        instance iterating the remaining elements.
+
+        """
+        iterator = iter(self)
+        prefix = tuple(itertools.islice(iterator, n))
+        suffix = Alakazam(iterator)
+        return (prefix, suffix)
+
 ZZ = Alakazam
 
 def count(start, step = 1):

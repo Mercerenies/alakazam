@@ -6,7 +6,7 @@ import alakazam as zz
 class SampleError(Exception):
     pass
 
-class TransformerTest(unittest.TestCase):
+class UtilTest(unittest.TestCase):
 
     def test_tee_1(self):
         arg = zz.of([1, 2, 3])
@@ -19,6 +19,30 @@ class TransformerTest(unittest.TestCase):
         (a, b) = arg.tee(n = 2)
         a.consume()
         self.assertEqual(b.list(), [1, 2, 3])
+
+    def test_split_1(self):
+        arg = zz.of([1, 2, 3, 4])
+        (a, b) = arg.split(2)
+        self.assertEqual(a, (1, 2))
+        self.assertEqual(b.list(), [3, 4])
+
+    def test_split_2(self):
+        arg = zz.of([1, 2, 3, 4])
+        (a, b) = arg.split(0)
+        self.assertEqual(a, ())
+        self.assertEqual(b.list(), [1, 2, 3, 4])
+
+    def test_split_3(self):
+        arg = zz.of([1, 2, 3, 4, 5])
+        (a, b) = arg.split(4)
+        self.assertEqual(a, (1, 2, 3, 4))
+        self.assertEqual(b.list(), [5])
+
+    def test_split_4(self):
+        arg = zz.of([1, 2, 3, 4, 5])
+        (a, b) = arg.split(20)
+        self.assertEqual(a, (1, 2, 3, 4, 5))
+        self.assertTrue(b.null())
 
     def test_id(self):
         self.assertEqual(zz.id("Alakazam"), "Alakazam")

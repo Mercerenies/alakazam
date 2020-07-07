@@ -346,7 +346,16 @@ class Alakazam(object):
 
     def foldr(self, func, init = _no_value):
         """Reduces the Alakazam iterable from the right."""
-        return self.foldr_lazy(lambda x, y: func(x, y()), init)
+
+        try:
+            # Try reversing and then folding left, since foldl doesn't
+            # explode the stack.
+            iterable = reversed(self)
+        except TypeError:
+            # If reversal is not supported, fall back to the recursive
+            # approach.
+            return self.foldr_lazy(lambda x, y: func(x, y()), init)
+        return Alakazam(iterable).foldl(lambda x, y: func(y, x), init = init)
 
     def foldr_lazy(self, func, init = _no_value):
         """Reduces the Alakazam iterable from the right lazily. This method

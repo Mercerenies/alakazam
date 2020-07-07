@@ -99,6 +99,17 @@ class ReducerTest(unittest.TestCase):
         func = lambda x, y: x - y
         self.assertEqual(zz.of([1, 2, 3, 4]).foldr(func, init = 100), 98)
 
+    def test_foldr_6(self):
+        # Works even after chained with other iterators
+        func = lambda x, y: x + y
+        self.assertEqual(zz.of([1, 2, 3, 4]).map(lambda x: x + 1).foldr(func, init = 100), 114)
+
+    def test_foldr_7(self):
+        # Type errors during iteration get passed through
+        func = lambda x, y: zz.raise_(TypeError("This exception should be raised"))
+        with self.assertRaises(TypeError):
+            zz.of([1, 2, 3, 4]).foldr(func)
+
     def test_foldr_lazy_1(self):
         func = lambda x, y: y() + x
         string = "CBA"

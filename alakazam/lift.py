@@ -257,6 +257,20 @@ class Alakazam(object):
                 pass
         return Alakazam(iterfunc())
 
+    def indices(self, func = None):
+        """Determines the (zero-based) indices in the current iterable which
+        contain values for which func returns truthy. Returns an
+        Alakazam iterable containing all of these indices in ascending
+        order.
+
+        """
+        if func is None: func = lambda x: x
+        def iterfunc():
+            for n, x in self.enumerate():
+                if func(x):
+                    yield n
+        return Alakazam(iterfunc())
+
     ## Producers that construct a Alakazam sequence ##
 
     @staticmethod

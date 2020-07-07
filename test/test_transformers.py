@@ -295,3 +295,19 @@ class TransformerTest(unittest.TestCase):
     def test_intersperse_3(self):
         iterable = zz.count(1, step=1).intersperse(0)
         self.assertEqual(iterable.take(10).list(), [1, 0, 2, 0, 3, 0, 4, 0, 5, 0])
+
+    def test_indices_1(self):
+        iterable = zz.of(["foo", "bar", "baz", "bar"]).indices(lambda x: x == "bar")
+        self.assertEqual(iterable.list(), [1, 3])
+
+    def test_indices_2(self):
+        iterable = zz.of(["foo", "bar", "baz", "bar"]).indices(lambda x: True)
+        self.assertEqual(iterable.list(), [0, 1, 2, 3])
+
+    def test_indices_3(self):
+        iterable = zz.of(["foo", "bar", "baz", "bar"]).indices(lambda x: False)
+        self.assertEqual(iterable.list(), [])
+
+    def test_indices_4(self):
+        iterable = zz.count(0, step=1).indices(lambda x: x % 3 == 0)
+        self.assertEqual(iterable.take(5).list(), [0, 3, 6, 9, 12])

@@ -311,3 +311,8 @@ class TransformerTest(unittest.TestCase):
     def test_indices_4(self):
         iterable = zz.count(0, step=1).indices(lambda x: x % 3 == 0)
         self.assertEqual(iterable.take(5).list(), [0, 3, 6, 9, 12])
+
+    def test_indices_5(self):
+        # Providing no function
+        iterable = zz.of([0, 1, True, False]).indices()
+        self.assertEqual(iterable.list(), [1, 2])

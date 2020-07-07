@@ -261,7 +261,8 @@ class Alakazam(object):
         """Determines the (zero-based) indices in the current iterable which
         contain values for which func returns truthy. Returns an
         Alakazam iterable containing all of these indices in ascending
-        order.
+        order. If no function is provided, the identity function is
+        assumed.
 
         """
         if func is None: func = lambda x: x

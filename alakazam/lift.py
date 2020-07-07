@@ -550,6 +550,18 @@ class Alakazam(object):
             f(x)
         return None
 
+    def first(self, default = _no_value):
+        """Returns the first element of the iterable, or the default value if
+        the iterable is empty. If the iterable is empty and no default
+        value is provided, then this function raises an AlakazamError.
+
+        """
+        for x in self:
+            return x
+        if default is _no_value:
+            raise AlakazamError("zz.first() of empty sequence")
+        return default
+
     ## Simplifiers that return another iterable or container type ##
 
     def list(self):

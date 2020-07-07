@@ -433,3 +433,20 @@ class ReducerTest(unittest.TestCase):
             n[0] += x
         zz.of([10, 20, 30, 40]).each(f)
         self.assertEqual(n[0], 100)
+
+    def test_first_1(self):
+        arg = zz.of([1, 2, 3, 4])
+        self.assertEqual(arg.first(), 1)
+
+    def test_first_2(self):
+        arg = zz.of([1, 2, 3, 4])
+        self.assertEqual(arg.first(default = "foobar"), 1)
+
+    def test_first_3(self):
+        arg = zz.of([])
+        self.assertEqual(arg.first(default = "foobar"), "foobar")
+
+    def test_first_4(self):
+        arg = zz.of([])
+        with self.assertRaises(zz.AlakazamError):
+            arg.first()

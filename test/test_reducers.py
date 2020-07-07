@@ -395,3 +395,30 @@ class ReducerTest(unittest.TestCase):
             raise SampleError("This function raises an error")
         with self.assertRaises(SampleError):
             zz.empty().apply(f)
+
+    def test_each_1(self):
+        def f(x):
+            raise SampleError("This error should not be raised")
+        zz.empty().each(f)
+
+    def test_each_2(self):
+        def f(x):
+            raise SampleError("This error should not be raised")
+        with self.assertRaises(SampleError):
+            zz.repeat(0).each(f)
+
+    def test_each_3(self):
+        # Singleton list to work around lack of nonlocal support in Python 2
+        n = [0]
+        def f(x):
+            n[0] += 1
+        zz.of([10, 20, 30, 40]).each(f)
+        self.assertEqual(n[0], 4)
+
+    def test_each_4(self):
+        # Singleton list to work around lack of nonlocal support in Python 2
+        n = [0]
+        def f(x):
+            n[0] += x
+        zz.of([10, 20, 30, 40]).each(f)
+        self.assertEqual(n[0], 100)

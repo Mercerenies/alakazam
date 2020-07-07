@@ -532,9 +532,19 @@ class Alakazam(object):
         """
         return f(self)
 
+    def each(self, f):
+        """Applies an arbitrary function to each element of the iterable,
+        discarding all return values from each call to the function.
+
+        """
+        for x in self:
+            f(x)
+        return None
+
     ## Simplifiers that return another iterable or container type ##
 
     def list(self):
+
         """Converts the iterable, which must be finite, to a list."""
         return list(self)
 

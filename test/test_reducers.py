@@ -450,3 +450,38 @@ class ReducerTest(unittest.TestCase):
         arg = zz.of([])
         with self.assertRaises(zz.AlakazamError):
             arg.first()
+
+    def test_index_1(self):
+        pos = zz.of(["foo", "bar", "baz", "bar"]).index(lambda x: x == "bar")
+        self.assertEqual(pos, 1)
+
+    def test_index_2(self):
+        pos = zz.of(["foo", "bar", "baz", "bar"]).index(lambda x: True)
+        self.assertEqual(pos, 0)
+
+    def test_index_3(self):
+        pos = zz.of(["foo", "bar", "baz", "bar"]).index(lambda x: False)
+        self.assertEqual(pos, None)
+
+    def test_index_4(self):
+        tmp = object()
+        pos = zz.of(["foo", "bar", "baz", "bar"]).index(lambda x: False, default = tmp)
+        self.assertEqual(pos, tmp)
+
+    def test_index_5(self):
+        tmp = object()
+        pos = zz.of(["foo", "bar", "baz", "bar"]).index(lambda x: x == "bar", default = tmp)
+        self.assertEqual(pos, 1)
+
+    def test_index_6(self):
+        pos = zz.count(0, step=1).index(lambda x: x % 3 == 1)
+        self.assertEqual(pos, 1)
+
+    def test_index_7(self):
+        pos = zz.count(0, step=1).drop(2).index(lambda x: x % 3 == 1)
+        self.assertEqual(pos, 2)
+
+    def test_index_8(self):
+        # Providing no function
+        pos = zz.of([0, 1, True, False]).index()
+        self.assertEqual(pos, 1)

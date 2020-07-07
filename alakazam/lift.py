@@ -577,6 +577,15 @@ class Alakazam(object):
             raise AlakazamError("zz.first() of empty sequence")
         return default
 
+    def index(self, func = None, default = None):
+        """Returns the index of the first element for which the function
+        returns truthy. If no value returns truthy, then the provided
+        default value is returned, or None if none is provided. If no
+        function is given, the identity function is assumed.
+
+        """
+        return self.indices(func = func).first(default = default)
+
     ## Simplifiers that return another iterable or container type ##
 
     def list(self):

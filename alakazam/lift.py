@@ -521,7 +521,7 @@ class Alakazam(object):
         try:
             return delim.join(self)
         except TypeError:
-            raise AlakazamError("zz.string() on non-string element")
+            raise AlakazamError("zz.join() on non-string element")
 
     def apply(self, f):
         """Applies an arbitrary function to the iterable itself. This is

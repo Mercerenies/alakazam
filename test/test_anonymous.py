@@ -459,3 +459,105 @@ class AnonymousTest(unittest.TestCase):
     def test_bind_11(self):
         fn = zz.bind(all_args, zz.kwarg('foo'), "bar", a=zz.kwarg('foo'))
         self.assertEqual(fn(foo=1000), ((1000, "bar"), {'a': 1000}))
+
+    def test_set_1(self):
+        a = [1, 2, 3]
+        fn = zz.set(zz.var(a)[0], _1)
+        fn(100)
+        self.assertEqual(a, [100, 2, 3])
+        fn(None)
+        self.assertEqual(a, [None, 2, 3])
+
+    def test_set_2(self):
+        a = [1, 2, 3]
+        b = [1, 2, 3]
+        fn = zz.set(_1[0], _2)
+        fn(a, 100)
+        self.assertEqual(a, [100, 2, 3])
+        self.assertEqual(b, [1, 2, 3])
+        fn(b, 250)
+        self.assertEqual(a, [100, 2, 3])
+        self.assertEqual(b, [250, 2, 3])
+
+    def test_set_3(self):
+        a = [1, 2, 3]
+        fn = zz.set(zz.var(a)[_1], 99)
+        fn(0)
+        self.assertEqual(a, [99, 2, 3])
+        fn(1)
+        self.assertEqual(a, [99, 99, 3])
+        fn(2)
+        self.assertEqual(a, [99, 99, 99])
+        with self.assertRaises(IndexError):
+            fn(3)
+
+    def test_set_4(self):
+        a = [[0]]
+        fn = zz.set(zz.var(a)[0][0], _1)
+        fn(100)
+        self.assertEqual(a, [[100]])
+
+    def test_set_5(self):
+        a = SimpleClass(0, 0)
+        fn = zz.set(_1.n, _2)
+        fn(a, 10)
+        self.assertEqual(a.n, 10)
+        self.assertEqual(a.m, 0)
+        fn(a, -10)
+        self.assertEqual(a.n, -10)
+        self.assertEqual(a.m, 0)
+
+    def test_set_6(self):
+        with self.assertRaises(AttributeError):
+            zz.set(object(), 0)
+        with self.assertRaises(zz.AlakazamError):
+            zz.set(_1 + _2, _3)
+
+    def test_assign(self):
+        a = [0, 1, 2]
+        fn = zz.assign(_1[_2], _3)
+        fn(a, 0, 100)
+        fn(a, 1, None)
+        fn(a, 2, None)
+        self.assertEqual(a, [100, None, None])
+
+    def test_delete_1(self):
+        a = [0, 1, 2]
+        fn = zz.delete(zz.var(a)[0])
+        fn()
+        self.assertEqual(a, [1, 2])
+        fn()
+        self.assertEqual(a, [2])
+        fn()
+        self.assertEqual(a, [])
+        with self.assertRaises(IndexError):
+            fn()
+
+    def test_delete_2(self):
+        a = [0, 1, 2, 3, 4, 5]
+        fn = zz.delete(zz.var(a)[_1])
+        fn(0)
+        self.assertEqual(a, [1, 2, 3, 4, 5])
+        fn(3)
+        self.assertEqual(a, [1, 2, 3, 5])
+
+    def test_delete_3(self):
+        a = [100, 200]
+        b = ["foo", "bar"]
+        fn = zz.delete(_1[0])
+        fn(a)
+        self.assertEqual((a, b), ([200], ["foo", "bar"]))
+        fn(b)
+        self.assertEqual((a, b), ([200], ["bar"]))
+        fn(b)
+        self.assertEqual((a, b), ([200], []))
+
+    def test_delete_4(self):
+        a = SimpleClass(100, 200)
+        self.assertEqual(a.__dict__, {'n': 100, 'm': 200})
+        zz.delete(_1.n)(a)
+        self.assertEqual(a.__dict__, {'m': 200})
+        zz.delete(_1.m)(a)
+        self.assertEqual(a.__dict__, {})
+        with self.assertRaises(AttributeError):
+            zz.delete(_1.m)(a)

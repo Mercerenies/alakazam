@@ -11,6 +11,8 @@ def compose(*fs):
 
 def swap(arg):
     """Swaps the first two elements of the tuple."""
+    if len(arg) < 2:
+        raise IndexError("swap() tuple too short")
     def index(x):
         return 1 - x if x < 2 else x
     return tuple(arg[index(n)] for n in range(len(arg)))

@@ -3,6 +3,32 @@ import unittest
 import alakazam as zz
 from alakazam import _1, _2, _3, _4, _5
 
+class UnaryOpMock(object):
+
+    def __init__(self, txt):
+        self.txt = txt
+
+    def __str__(self):
+        return self.txt
+
+    def __repr__(self):
+        return self.txt
+
+    def __eq__(self, other):
+        return type(self) == type(other) and self.txt == other.txt
+
+    def __hash__(self):
+        return hash((type(self), self.txt))
+
+    def __neg__(self):
+        return UnaryOpMock("-" + self.txt)
+
+    def __pos__(self):
+        return UnaryOpMock("+" + self.txt)
+
+    def __invert__(self):
+        return UnaryOpMock("~" + self.txt)
+
 class AnonymousTest(unittest.TestCase):
 
     def test_add_1(self):
@@ -74,5 +100,228 @@ class AnonymousTest(unittest.TestCase):
         with self.assertRaises(ZeroDivisionError):
             fn(0)
 
+    def test_floordiv_1(self):
+        fn = _1 // 2
+        self.assertEqual(fn(10), 5)
+        self.assertEqual(fn(5), 2)
 
-    # /////
+    def test_floordiv_2(self):
+        fn = _2 // _1
+        self.assertEqual(fn(3, 10), 3)
+
+    def test_floordiv_3(self):
+        fn = 10 // _1
+        self.assertEqual(fn(6), 1)
+        with self.assertRaises(ZeroDivisionError):
+            fn(0)
+
+    def test_mod_1(self):
+        fn = _1 % 10
+        self.assertEqual(fn(4), 4)
+        self.assertEqual(fn(16), 6)
+        self.assertEqual(fn(0), 0)
+        self.assertEqual(fn(".%s."), ".10.")
+
+    def test_mod_2(self):
+        fn = _1 % _2
+        self.assertEqual(fn(4, 3), 1)
+
+    def test_mod_3(self):
+        fn = 10 % _1
+        self.assertEqual(fn(8), 2)
+        self.assertEqual(fn(11), 10)
+        with self.assertRaises(ZeroDivisionError):
+            fn(0)
+
+    def test_pow_1(self):
+        fn = _1 ** 2
+        self.assertEqual(fn(3), 9)
+        self.assertEqual(fn(2), 4)
+
+    def test_pow_2(self):
+        fn = 2 ** _1
+        self.assertEqual(fn(0), 1)
+        self.assertEqual(fn(3), 8)
+
+    def test_pow_3(self):
+        fn = _1 ** _2
+        self.assertEqual(fn(2, 5), 32)
+        self.assertEqual(fn(3, 3), 27)
+
+    def test_lshift_1(self):
+        fn = _1 << 2
+        self.assertEqual(fn(3), 12)
+        self.assertEqual(fn(0), 0)
+
+    def test_lshift_2(self):
+        fn = 3 << _1
+        self.assertEqual(fn(0), 3)
+        self.assertEqual(fn(1), 6)
+        self.assertEqual(fn(2), 12)
+
+    def test_lshift_3(self):
+        fn = _1 << _2
+        self.assertEqual(fn(2, 2), 8)
+
+    def test_rshift_1(self):
+        fn = _1 >> 1
+        self.assertEqual(fn(10), 5)
+        self.assertEqual(fn(9), 4)
+
+    def test_rshift_2(self):
+        fn = 3 >> _1
+        self.assertEqual(fn(0), 3)
+        self.assertEqual(fn(1), 1)
+        self.assertEqual(fn(2), 0)
+
+    def test_rshift_3(self):
+        fn = _1 >> _2
+        self.assertEqual(fn(5, 1), 2)
+
+    def test_and_1(self):
+        fn = _1 & 3
+        self.assertEqual(fn(3), 3)
+        self.assertEqual(fn(5), 1)
+        self.assertEqual(fn(6), 2)
+
+    def test_and_2(self):
+        fn = 3 & _1
+        self.assertEqual(fn(3), 3)
+        self.assertEqual(fn(5), 1)
+        self.assertEqual(fn(6), 2)
+
+    def test_and_3(self):
+        fn = _1 & _2
+        self.assertEqual(fn(3, 3), 3)
+        self.assertEqual(fn(5, 3), 1)
+        self.assertEqual(fn(3, 6), 2)
+
+    def test_or_1(self):
+        fn = _1 | 3
+        self.assertEqual(fn(3), 3)
+        self.assertEqual(fn(5), 7)
+        self.assertEqual(fn(6), 7)
+
+    def test_or_2(self):
+        fn = 3 | _1
+        self.assertEqual(fn(3), 3)
+        self.assertEqual(fn(5), 7)
+        self.assertEqual(fn(6), 7)
+
+    def test_or_3(self):
+        fn = _1 | _2
+        self.assertEqual(fn(3, 3), 3)
+        self.assertEqual(fn(5, 3), 7)
+        self.assertEqual(fn(3, 6), 7)
+
+    def test_xor_1(self):
+        fn = _1 ^ 3
+        self.assertEqual(fn(3), 0)
+        self.assertEqual(fn(5), 6)
+        self.assertEqual(fn(6), 5)
+
+    def test_xor_2(self):
+        fn = 3 ^ _1
+        self.assertEqual(fn(3), 0)
+        self.assertEqual(fn(5), 6)
+        self.assertEqual(fn(6), 5)
+
+    def test_xor_3(self):
+        fn = _1 ^ _2
+        self.assertEqual(fn(3, 3), 0)
+        self.assertEqual(fn(5, 3), 6)
+        self.assertEqual(fn(3, 6), 5)
+
+    def test_pos(self):
+        fn = + _1
+        self.assertEqual(fn(10), 10)
+        self.assertEqual(fn(UnaryOpMock("abc")), UnaryOpMock("+abc"))
+
+    def test_neg(self):
+        fn = - _1
+        self.assertEqual(fn(5), -5)
+        self.assertEqual(fn(UnaryOpMock("abc")), UnaryOpMock("-abc"))
+
+    def test_invert(self):
+        fn = ~ _1
+        self.assertEqual(fn(0), -1)
+        self.assertEqual(fn(UnaryOpMock("abc")), UnaryOpMock("~abc"))
+
+    def test_eq(self):
+        self.assertEqual((_1 == 0)(-1), False)
+        self.assertEqual((_1 == 0)( 0), True )
+        self.assertEqual((_1 == 0)(+1), False)
+
+        self.assertEqual((0 == _1)(-1), False)
+        self.assertEqual((0 == _1)( 0), True )
+        self.assertEqual((0 == _1)(+1), False)
+
+        self.assertEqual((_1 == _2)(0, -1), False)
+        self.assertEqual((_1 == _2)(0,  0), True )
+        self.assertEqual((_1 == _2)(0, +1), False)
+
+    def test_ne(self):
+        self.assertEqual((_1 != 0)(-1), True )
+        self.assertEqual((_1 != 0)( 0), False)
+        self.assertEqual((_1 != 0)(+1), True )
+
+        self.assertEqual((0 != _1)(-1), True )
+        self.assertEqual((0 != _1)( 0), False)
+        self.assertEqual((0 != _1)(+1), True )
+
+        self.assertEqual((_1 != _2)(0, -1), True )
+        self.assertEqual((_1 != _2)(0,  0), False)
+        self.assertEqual((_1 != _2)(0, +1), True )
+
+    def test_lt(self):
+        self.assertEqual((_1 < 0)(-1), True )
+        self.assertEqual((_1 < 0)( 0), False)
+        self.assertEqual((_1 < 0)(+1), False)
+
+        self.assertEqual((0 < _1)(-1), False)
+        self.assertEqual((0 < _1)( 0), False)
+        self.assertEqual((0 < _1)(+1), True )
+
+        self.assertEqual((_1 < _2)(0, -1), False)
+        self.assertEqual((_1 < _2)(0,  0), False)
+        self.assertEqual((_1 < _2)(0, +1), True )
+
+    def test_le(self):
+        self.assertEqual((_1 <= 0)(-1), True )
+        self.assertEqual((_1 <= 0)( 0), True )
+        self.assertEqual((_1 <= 0)(+1), False)
+
+        self.assertEqual((0 <= _1)(-1), False)
+        self.assertEqual((0 <= _1)( 0), True )
+        self.assertEqual((0 <= _1)(+1), True )
+
+        self.assertEqual((_1 <= _2)(0, -1), False)
+        self.assertEqual((_1 <= _2)(0,  0), True )
+        self.assertEqual((_1 <= _2)(0, +1), True )
+
+    def test_gt(self):
+        self.assertEqual((_1 > 0)(-1), False)
+        self.assertEqual((_1 > 0)( 0), False)
+        self.assertEqual((_1 > 0)(+1), True )
+
+        self.assertEqual((0 > _1)(-1), True )
+        self.assertEqual((0 > _1)( 0), False)
+        self.assertEqual((0 > _1)(+1), False)
+
+        self.assertEqual((_1 > _2)(0, -1), True )
+        self.assertEqual((_1 > _2)(0,  0), False)
+        self.assertEqual((_1 > _2)(0, +1), False)
+
+    def test_ge(self):
+        self.assertEqual((_1 >= 0)(-1), False)
+        self.assertEqual((_1 >= 0)( 0), True )
+        self.assertEqual((_1 >= 0)(+1), True )
+
+        self.assertEqual((0 >= _1)(-1), True )
+        self.assertEqual((0 >= _1)( 0), True )
+        self.assertEqual((0 >= _1)(+1), False)
+
+        self.assertEqual((_1 >= _2)(0, -1), True )
+        self.assertEqual((_1 >= _2)(0,  0), True )
+        self.assertEqual((_1 >= _2)(0, +1), False)
+

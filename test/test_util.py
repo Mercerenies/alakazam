@@ -128,3 +128,17 @@ class UtilTest(unittest.TestCase):
 
     def test_xor_5(self):
         self.assertTrue(zz.xor(True, True, True))
+
+    def test_swap_1(self):
+        self.assertEqual(zz.swap((1, 2)), (2, 1))
+
+    def test_swap_2(self):
+        self.assertEqual(zz.swap((1, 2, 3, 4)), (2, 1, 3, 4))
+
+    def test_swap_3(self):
+        with self.assertRaises(IndexError):
+            zz.swap((1,))
+
+    def test_swap_4(self):
+        with self.assertRaises(IndexError):
+            zz.swap(())

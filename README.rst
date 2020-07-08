@@ -96,6 +96,24 @@ Author
 
 Alakazam was written by Silvio Mayolo.
 
+Release Notes (0.7.0)
+---------------------
+
+* ``apply`` reducer added, as per Issue #2.
+
+* ``indices`` and ``index``, for returning indices of all matches in
+  an iterable.
+
+* ``join``, ``each``, and ``first`` reducers added.
+
+* ``split`` function, combining the behaviors of ``take`` and
+  ``drop``, added.
+
+* ``foldr`` should perform significantly better when used on iterables
+  which implement ``__reversed__``.
+
+* Several minor bugfixes involving utility functions.
+
 Release Notes (0.6.0)
 ---------------------
 

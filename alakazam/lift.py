@@ -547,14 +547,15 @@ class Alakazam(object):
         except TypeError:
             raise AlakazamError("zz.join() on non-string element")
 
-    def apply(self, f):
+    def apply(self, f, *args, **kwargs):
         """Applies an arbitrary function to the iterable itself. This is
         equivalent to simply calling the function on the iterable
         Alakazam object directly but tends to fit better into a stream
-        of calls.
+        of calls. Any additional arguments to apply are passed on to
+        the provided function.
 
         """
-        return f(self)
+        return f(self, *args, **kwargs)
 
     def each(self, f):
         """Applies an arbitrary function to each element of the iterable,

@@ -1,5 +1,6 @@
 
 import unittest
+import operator
 import functools
 import alakazam as zz
 
@@ -381,7 +382,6 @@ class ReducerTest(unittest.TestCase):
         self.assertEqual(gen.apply(lambda _: "example text"), "example text")
 
     def test_apply_3(self):
-        gen = zz.range(5)
         self.assertEqual(zz.range(5).apply(sum), 10)
 
     def test_apply_4(self):
@@ -406,6 +406,15 @@ class ReducerTest(unittest.TestCase):
             raise SampleError("This function raises an error")
         with self.assertRaises(SampleError):
             zz.empty().apply(f)
+
+    def test_apply_7(self):
+        self.assertEqual(zz.range(5).apply(sum, 10), 20)
+
+    def test_apply_8(self):
+        def f(x, arg):
+            x = list(x)
+            return arg(x[0], x[2])
+        self.assertEqual(zz.of([10, -20, 30]).apply(f, arg=operator.add), 40)
 
     def test_each_1(self):
         def f(x):

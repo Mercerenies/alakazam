@@ -20,3 +20,19 @@ class ConversionTest(unittest.TestCase):
         data = {1: 'foo', 2: 'bar', 10: 10, "Alpha": 20, None: None}
         self.assertEqual(zz.of_dict(data).dict(), data)
 
+    def test_sorted_1(self):
+        self.assertEqual(zz.of([3, 1, 2, 0]).sorted(), [0, 1, 2, 3])
+
+    def test_sorted_2(self):
+        self.assertEqual(zz.of([3, 1, 2, 0]).sorted(reverse=True), [3, 2, 1, 0])
+
+    def test_sorted_3(self):
+        self.assertEqual(zz.of([10, 9, 11]).sorted(), [9, 10, 11])
+
+    def test_sorted_4(self):
+        # Lexicographic ordering
+        self.assertEqual(zz.of([10, 9, 11]).sorted(key=str), [10, 11, 9])
+
+    def test_sorted_5(self):
+        # Lexicographic ordering (reversed)
+        self.assertEqual(zz.of([10, 9, 11]).sorted(key=str, reverse=True), [9, 11, 10])

@@ -589,7 +589,6 @@ class Alakazam(object):
     ## Simplifiers that return another iterable or container type ##
 
     def list(self):
-
         """Converts the iterable, which must be finite, to a list."""
         return list(self)
 
@@ -607,6 +606,15 @@ class Alakazam(object):
 
         """
         return dict(self, **kwargs)
+
+    def sorted(self, key = None, reverse = False):
+        """Converts the iterable, which must be finite, to a sorted list, as
+        though by calling the builtin sorted function. The key and
+        reverse keyword arguments have the same meaning as in the
+        builtin function of the same name.
+
+        """
+        return sorted(self, key=key, reverse=reverse)
 
     ## Miscellaneous ##
 

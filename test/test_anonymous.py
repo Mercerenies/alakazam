@@ -38,6 +38,9 @@ class SimpleClass(object):
     def sum(self):
         return self.n + self.m
 
+def all_args(*args, **kwargs):
+    return (args, kwargs)
+
 class AnonymousTest(unittest.TestCase):
 
     def test_add_1(self):
@@ -367,3 +370,92 @@ class AnonymousTest(unittest.TestCase):
         self.assertEqual(fn(obj, 2), "baz")
         with self.assertRaises(IndexError):
             fn(obj, 3)
+
+    def test_arg(self):
+        fn = zz.arg(5) + zz.arg(6)
+        arglist = [10, 20, 30, 40, 50, 60]
+        self.assertEqual(fn(*arglist), 110)
+
+    def test_kwarg(self):
+        fn = zz.kwarg("a") - zz.kwarg("b")
+        self.assertEqual(fn("unrelated position argument", a=5, b=6, c=100), -1)
+
+    def test_var_1(self):
+        fn = zz.var(200)
+        # Doesn't matter what arguments I pass
+        self.assertEqual(fn(), 200)
+        self.assertEqual(fn(0, 100), 200)
+        self.assertEqual(fn(None, "foobar", default=object(), key=lambda x: x), 200)
+        self.assertEqual(fn(200, object, var={'a': 1}, py="Python"), 200)
+
+    def test_var_2(self):
+        # Equivalent to just _1 + 100, but we're explicitly wrapping
+        # the number.
+        fn = _1 + zz.var(100)
+        self.assertEqual(fn(10), 110)
+        self.assertEqual(fn(-1), 99)
+        self.assertEqual(fn(0), 100)
+
+    def test_var_3(self):
+        obj = ["foo", "bar", "baz"]
+        fn = zz.var(obj)[_1]
+        self.assertEqual(fn(0), "foo")
+        self.assertEqual(fn(1), "bar")
+        self.assertEqual(fn(2), "baz")
+        with self.assertRaises(IndexError):
+            fn(3)
+
+    def test_var_4(self):
+        # Currying. Please don't do this in production code.
+        fn = _1 - zz.var(_1)
+        self.assertEqual(fn(10)(5), 5)
+        self.assertEqual(fn(10)(3), 7)
+        self.assertEqual(fn(5)(6), -1)
+
+    def test_bind_1(self):
+        fn = zz.bind(all_args)(100, 200, a=1)
+        self.assertEqual(fn(), ((100, 200), {'a': 1}))
+        self.assertEqual(fn(-1, a=2, b=3), ((100, 200), {'a': 1}))
+
+    def test_bind_2(self):
+        fn = zz.bind(all_args)(_2, _1)
+        self.assertEqual(fn(100, 200), ((200, 100), {}))
+        self.assertEqual(fn("foo", "bar", a=-1), (("bar", "foo"), {}))
+
+    def test_bind_3(self):
+        fn = zz.bind(all_args)(1000, _1)
+        self.assertEqual(fn(10), ((1000, 10), {}))
+
+    def test_bind_4(self):
+        fn = zz.bind(all_args)(_1, "foo", a=_2)
+        self.assertEqual(fn(-1, None), ((-1, "foo"), {'a': None}))
+
+    def test_bind_5(self):
+        fn = zz.bind(all_args)(zz.kwarg('foo'), "bar", a=zz.kwarg('foo'))
+        self.assertEqual(fn(foo=1000), ((1000, "bar"), {'a': 1000}))
+
+    def test_bind_6(self):
+        fn = zz.bind(all_args)()
+        self.assertEqual(fn(10, 20, None, foo="bar", a=3), ((), {}))
+
+    def test_bind_7(self):
+        fn = zz.bind(all_args, 100, 200, a=1)
+        self.assertEqual(fn(), ((100, 200), {'a': 1}))
+        self.assertEqual(fn(-1, a=2, b=3), ((100, 200), {'a': 1}))
+
+    def test_bind_8(self):
+        fn = zz.bind(all_args, _2, _1)
+        self.assertEqual(fn(100, 200), ((200, 100), {}))
+        self.assertEqual(fn("foo", "bar", a=-1), (("bar", "foo"), {}))
+
+    def test_bind_9(self):
+        fn = zz.bind(all_args, 1000, _1)
+        self.assertEqual(fn(10), ((1000, 10), {}))
+
+    def test_bind_10(self):
+        fn = zz.bind(all_args, _1, "foo", a=_2)
+        self.assertEqual(fn(-1, None), ((-1, "foo"), {'a': None}))
+
+    def test_bind_11(self):
+        fn = zz.bind(all_args, zz.kwarg('foo'), "bar", a=zz.kwarg('foo'))
+        self.assertEqual(fn(foo=1000), ((1000, "bar"), {'a': 1000}))

@@ -71,7 +71,7 @@ class TransformerTest(unittest.TestCase):
     def test_accumulate_4(self):
         self.assertEqual(zz.empty().accumulate(init = None).list(), [None])
 
-    def test_accumulate_4(self):
+    def test_accumulate_5(self):
         self.assertTrue(zz.empty().accumulate().null())
 
     def test_chain_1(self):

@@ -64,7 +64,7 @@ class ProducerTest(unittest.TestCase):
         iterable = zz.zipup()
         self.assertEqual(iterable.list(), [])
 
-    def test_zipup_4(self):
+    def test_zipup_5(self):
         # Make sure it works in the infinite case
         iterable = zz.zipup(zz.repeat(1), zz.repeat(2))
         self.assertEqual(iterable.take(2).list(), [(1, 2), (1, 2)])

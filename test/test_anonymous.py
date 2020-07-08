@@ -561,3 +561,9 @@ class AnonymousTest(unittest.TestCase):
         self.assertEqual(a.__dict__, {})
         with self.assertRaises(AttributeError):
             zz.delete(_1.m)(a)
+
+    def test_delete_5(self):
+        with self.assertRaises(AttributeError):
+            zz.delete(object())
+        with self.assertRaises(zz.AlakazamError):
+            zz.delete(_1 + _2)

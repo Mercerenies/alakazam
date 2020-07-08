@@ -29,6 +29,15 @@ class UnaryOpMock(object):
     def __invert__(self):
         return UnaryOpMock("~" + self.txt)
 
+class SimpleClass(object):
+
+    def __init__(self, n, m):
+        self.n = n
+        self.m = m
+
+    def sum(self):
+        return self.n + self.m
+
 class AnonymousTest(unittest.TestCase):
 
     def test_add_1(self):
@@ -325,3 +334,36 @@ class AnonymousTest(unittest.TestCase):
         self.assertEqual((_1 >= _2)(0,  0), True )
         self.assertEqual((_1 >= _2)(0, +1), False)
 
+    def test_getattr_1(self):
+        obj = SimpleClass(10, 20)
+        self.assertEqual((_1.n)(obj), 10)
+        self.assertEqual((_1.m)(obj), 20)
+
+    def test_getattr_2(self):
+        obj = SimpleClass(10, 20)
+        self.assertEqual((_1.sum)(obj)(), 30)
+
+    def test_getitem_1(self):
+        obj = ["foo", "bar", "baz"]
+        self.assertEqual((_1[0])(obj), "foo")
+        self.assertEqual((_1[1])(obj), "bar")
+        self.assertEqual((_1[2])(obj), "baz")
+        with self.assertRaises(IndexError):
+            (_1[3])(obj)
+
+    def test_getitem_2(self):
+        obj = {"foo": 100, "bar": 200, "baz": 300}
+        self.assertEqual((_1["foo"])(obj), 100)
+        self.assertEqual((_1["bar"])(obj), 200)
+        self.assertEqual((_1["baz"])(obj), 300)
+        with self.assertRaises(KeyError):
+            (_1["frobnicate"])(obj)
+
+    def test_getitem_3(self):
+        obj = ["foo", "bar", "baz"]
+        fn = _1[_2]
+        self.assertEqual(fn(obj, 0), "foo")
+        self.assertEqual(fn(obj, 1), "bar")
+        self.assertEqual(fn(obj, 2), "baz")
+        with self.assertRaises(IndexError):
+            fn(obj, 3)

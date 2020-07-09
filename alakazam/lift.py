@@ -342,9 +342,37 @@ class Alakazam(object):
         """
         return Alakazam(_zip(*args))
 
+    @staticmethod
+    def zipup_longest(*args, **kwargs):
+        """Zips the arguments together, padding with fillvalue."""
+        if 'fillvalue' in kwargs:
+            fillvalue = kwargs['fillvalue']
+        else:
+            fillvalue = None
+        return Alakazam(_zip_longest(*args, fillvalue = fillvalue))
+
+    @staticmethod
+    def chainup(*args):
+        """Chains the arguments together and produces a single Alakazam
+        iterable.
+
+        """
+        return Alakazam(itertools.chain(*args))
+
+    @staticmethod
+    def chainup_lazy(iterable):
+        """Takes a single iterable argument, all of whose elements should
+        themselves be iterable, and flattens the iterable, returning
+        an Alakazam iterable that iterates each provided iterable in
+        order.
+
+        """
+        return Alakazam(itertools.chain.from_iterable(iterable))
+
     ## Reducers that return a scalar ##
 
     def reduce(self, func, init = _no_value):
+
         """Reduces the Alakazam iterable, as though with the standard
         functools.reduce.
 
@@ -684,3 +712,27 @@ def zipup(*args):
 
     """
     return ZZ.zipup(*args)
+
+def zipup_longest(*args, **kwargs):
+    """Zips the arguments together and produces a single Alakazam
+    iterable. Pads with fillvalue when shorter iterables reach their
+    end.
+
+    """
+    return ZZ.zipup_longest(*args, **kwargs)
+
+def chainup(*args):
+    """Chains the arguments together and produces a single Alakazam
+    iterable.
+
+    """
+    return ZZ.chainup(*args)
+
+def chainup_lazy(iterable):
+    """Takes a single iterable argument, all of whose elements should
+    themselves be iterable, and flattens the iterable, returning
+    an Alakazam iterable that iterates each provided iterable in
+    order.
+
+    """
+    return ZZ.chainup_lazy(iterable)

@@ -86,3 +86,60 @@ class ProducerTest(unittest.TestCase):
     def test_repeat_2(self):
         iterable = zz.repeat(12, n = 2)
         self.assertEqual(list(iterable), [12, 12])
+
+    def test_chainup_1(self):
+        self.assertEqual(zz.chainup([1, 2, 3], [4, 5, 6]).list(), [1, 2, 3, 4, 5, 6])
+
+    def test_chainup_2(self):
+        self.assertEqual(zz.chainup([1, 2, 3], [], [4], [5], (6,)).list(), [1, 2, 3, 4, 5, 6])
+
+    def test_chainup_3(self):
+        self.assertEqual(zz.chainup(()).list(), [])
+
+    def test_chainup_4(self):
+        self.assertEqual(zz.chainup().list(), [])
+
+    def test_chainup_lazy_1(self):
+        self.assertEqual(zz.chainup_lazy([[1, 2, 3], [4, 5, 6]]).list(), [1, 2, 3, 4, 5, 6])
+
+    def test_chainup_lazy_2(self):
+        self.assertEqual(zz.chainup_lazy(([1], (2, 3), [4], [], [5, 6])).list(), [1, 2, 3, 4, 5, 6])
+
+    def test_chainup_lazy_3(self):
+        n = [0]
+        def foo():
+            for i in zz.count(0):
+                n[0] += 1
+                yield [n[0], n[0]]
+        arg = zz.chainup_lazy(foo())
+        self.assertEqual(n, [0]) # chainup_lazy shouldn't have run foo() yet
+        self.assertEqual(arg.take(5).list(), [1, 1, 2, 2, 3])
+        self.assertEqual(n, [3])
+
+    def test_zipup_longest_1(self):
+        iterable = zz.zipup_longest([1, 2], ["A", "B"])
+        self.assertEqual(iterable.list(), [(1, "A"), (2, "B")])
+
+    def test_zipup_longest_2(self):
+        iterable = zz.zipup_longest([1, 2], [3, 4], [5, 6])
+        self.assertEqual(iterable.list(), [(1, 3, 5), (2, 4, 6)])
+
+    def test_zipup_longest_3(self):
+        iterable = zz.zipup_longest([1], [2, 3])
+        self.assertEqual(iterable.list(), [(1, 2), (None, 3)])
+
+    def test_zipup_longest_4(self):
+        iterable = zz.zipup_longest([1, 2], [3])
+        self.assertEqual(iterable.list(), [(1, 3), (2, None)])
+
+    def test_zipup_longest_5(self):
+        iterable = zz.zipup_longest([], ())
+        self.assertTrue(iterable.null())
+
+    def test_zipup_longest_6(self):
+        iterable = zz.zipup_longest()
+        self.assertTrue(iterable.null())
+
+    def test_zipup_longest_7(self):
+        iterable = zz.zipup_longest([1], [2, 3], [4], fillvalue = 9)
+        self.assertEqual(iterable.list(), [(1, 2, 4), (9, 3, 9)])

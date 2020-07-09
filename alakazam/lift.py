@@ -71,6 +71,9 @@ class Alakazam(object):
         """Eliminates the first N elements of the iterable."""
         return self.islice(n, None)
 
+    def rest(self):
+        return self.drop(1)
+
     def accumulate(self, func = None, init = _no_value):
         """Accumulates the elements of the list, using the given function or
         the __add__ operator. This method behaves identically to the

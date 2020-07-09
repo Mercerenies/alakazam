@@ -59,6 +59,15 @@ class TransformerTest(unittest.TestCase):
         # Works on infinite lists
         self.assertEqual(zz.count(1).drop(2).take(3).list(), [3, 4, 5])
 
+    def test_rest_1(self):
+        self.assertEqual(zz.range(4).rest().list(), [1, 2, 3])
+
+    def test_rest_2(self):
+        self.assertEqual(zz.empty().rest().list(), [])
+
+    def test_rest_3(self):
+        self.assertEqual(zz.count(1).rest().take(4).list(), [2, 3, 4, 5])
+
     def test_accumulate_1(self):
         self.assertEqual(zz.count(0).accumulate().take(5).list(), [0, 1, 3, 6, 10])
 
